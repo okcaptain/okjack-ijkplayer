@@ -36,10 +36,7 @@ jobs:
           ./init-android.sh
           
           cd android/contrib
-          
-          ./compile-openssl.sh clean
-          ./compile-openssl.sh armv7a
-          
+
           ./compile-ffmpeg.sh clean
           ./compile-ffmpeg.sh armv7a
           

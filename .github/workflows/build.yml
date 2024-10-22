@@ -34,7 +34,6 @@ jobs:
           chmod +x ./config/module-custom.sh
           chmod +x ./config/module-ok.sh
           ./init-android.sh
-          ./init-android-openssl.sh
           
           cd android/contrib
           

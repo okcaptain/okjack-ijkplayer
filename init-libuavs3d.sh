@@ -16,8 +16,8 @@
 # limitations under the License.
 #
 
-IJK_LIBUAVS3D_UPSTREAM=https://github.com/uavs3/uavs3d.git
-IJK_LIBUAVS3D_FORK=https://github.com/uavs3/uavs3d.git
+IJK_LIBUAVS3D_UPSTREAM=https://github.com/okcaptain/uavs3d.git
+IJK_LIBUAVS3D_FORK=https://github.com/okcaptain/uavs3d.git
 IJK_LIBUAVS3D_COMMIT=master
 IJK_LIBUAVS3D_LOCAL_REPO=extra/libuavs3d
 

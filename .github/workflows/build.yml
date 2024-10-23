@@ -33,6 +33,7 @@ jobs:
           
           chmod +x ./config/module-custom.sh
           chmod +x ./config/module-ok.sh
+          chmod +x ./init-libuavs3d.sh
           ./init-android.sh
           ./init-libuavs3d.sh
           ./init-android-openssl.sh

@@ -12,7 +12,7 @@ jobs:
       - name: Unzip libuavs3d
         run: |
           mkdir -p android/contrib/build/libuavs3d-armv7a
-          unzip ./libuavs3d-armv7a.zip android/contrib/build/libuavs3d-armv7a
+          unzip ./libuavs3d-armv7a.zip -d android/contrib/build/libuavs3d-armv7a/
 
       - uses: nttld/setup-ndk@v1
         id: setup-ndk

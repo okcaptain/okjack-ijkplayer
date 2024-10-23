@@ -14,10 +14,6 @@ jobs:
           ndk-version: r21e
           add-to-path: false
 
-      - name: test
-        run: |
-          sudo apt-get install libncurses5
-
       - name: Compile libuavs3d
         env:
           ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}

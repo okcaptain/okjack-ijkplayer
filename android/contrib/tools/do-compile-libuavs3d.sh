@@ -45,14 +45,6 @@ FF_ANDROID_ABI=armeabi-v7a
 FF_BUILD_NAME=
 FF_SOURCE=
 
-#--------------------
-echo ""
-echo "--------------------"
-echo "[*] make NDK standalone toolchain"
-echo "--------------------"
-. ./tools/do-detect-env.sh
-
-
 
 #----- armv7a begin -----
 if [ "$FF_ARCH" = "armv7a" ]; then

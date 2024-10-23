@@ -271,7 +271,6 @@ if [ -f "${FF_DEP_LIBUAVS3D_LIB}/libuavs3d.a" ]; then
 
     FF_CFLAGS="$FF_CFLAGS -I${FF_DEP_LIBUAVS3D_INC}"
     FF_DEP_LIBS="$FF_DEP_LIBS -L${FF_DEP_LIBUAVS3D_LIB} -luavs3d -lm"
-
 fi
 
 FF_CFG_FLAGS="$FF_CFG_FLAGS $COMMON_FF_CFG_FLAGS"
@@ -318,9 +317,7 @@ if [ -f "./config.h" ]; then
     echo 'reuse configure'
 else
     which $CC
-    ./configure $FF_CFG_FLAGS \
-        --extra-cflags="$FF_CFLAGS $FF_EXTRA_CFLAGS" \
-        --extra-ldflags="$FF_DEP_LIBS $FF_EXTRA_LDFLAGS"
+    ./configure $FF_CFG_FLAGS --extra-cflags="$FF_CFLAGS $FF_EXTRA_CFLAGS" --extra-ldflags="$FF_DEP_LIBS $FF_EXTRA_LDFLAGS"
     make clean
 fi
 

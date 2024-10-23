@@ -313,7 +313,7 @@ if [ -f "./config.h" ]; then
 else
     which $CC
     echo "./configure $FF_CFG_FLAGS --extra-cflags=$FF_CFLAGS $FF_EXTRA_CFLAGS --extra-ldflags=$FF_DEP_LIBS $FF_EXTRA_LDFLAGS"
-    ./configure $FF_CFG_FLAGS --extra-cflags="$FF_CFLAGS $FF_EXTRA_CFLAGS" --extra-ldflags="$FF_DEP_LIBS $FF_EXTRA_LDFLAGS"  >> /tmp/compile-ffmpeg-cmd.log 2>&1
+    ./configure $FF_CFG_FLAGS --extra-cflags="$FF_CFLAGS $FF_EXTRA_CFLAGS" --extra-ldflags="$FF_DEP_LIBS $FF_EXTRA_LDFLAGS"  >> /tmp/compile-ffmpeg-cmd.log || true
     cat /tmp/compile-ffmpeg-cmd.log
     make clean
 fi

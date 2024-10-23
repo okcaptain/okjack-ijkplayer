@@ -40,7 +40,7 @@ jobs:
       - uses: actions/upload-artifact@v4.3.6
         with:
           name: libuavs3d-armv7a
-          path: ${{ env.workDir }}/android/contrib/libuavs3d-armv7a/
+          path: ${{ env.workDir }}/android/contrib/build/libuavs3d-armv7a/
   
 
   linux:
@@ -53,7 +53,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: libuavs3d-armv7a
-          path: ./android/contrib/libuavs3d-armv7a
+          path: ./android/contrib/build/libuavs3d-armv7a
 
       - uses: nttld/setup-ndk@v1
         id: setup-ndk

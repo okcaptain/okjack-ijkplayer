@@ -33,8 +33,8 @@ jobs:
           
           chmod +x ./config/module-custom.sh
           chmod +x ./config/module-ok.sh
-          chmod +x ./init-libuavs3d.sh
           ./init-android.sh
+          chmod +x ./init-libuavs3d.sh
           ./init-libuavs3d.sh
           ./init-android-openssl.sh
           
@@ -43,6 +43,7 @@ jobs:
           ./compile-openssl.sh clean
           ./compile-openssl.sh armv7a
           
+          chmod +x ./compile-libuavs3d.sh
           ./compile-libuavs3d.sh clean
           ./compile-libuavs3d.sh armv7a
           

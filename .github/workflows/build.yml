@@ -43,7 +43,6 @@ jobs:
         with:
           ndk-version: r14b
           add-to-path: false
-          local-cache: true
 
       - name: test
         run: |

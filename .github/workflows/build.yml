@@ -11,6 +11,36 @@ jobs:
       - uses: nttld/setup-ndk@v1
         id: setup-ndk
         with:
+          ndk-version: r21e
+          add-to-path: false
+
+      - name: test
+        run: |
+          sudo apt-get install libncurses5
+
+      - name: Compile libuavs3d
+        env:
+          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
+        run: |
+          
+          ANDROID_NDK_HOME=${{ env.ANDROID_NDK_HOME }}
+          export ANDROID_SDK=$ANDROID_HOME
+          export ANDROID_NDK=$ANDROID_NDK_HOME
+          export ANDROID_NDK_ROOT=$ANDROID_NDK_HOME
+          
+          chmod +x ./init-libuavs3d.sh
+          ./init-libuavs3d.sh
+          
+          cd android/contrib
+          chmod +x ./compile-libuavs3d.sh
+          chmod +x ./tools/do-compile-libuavs3d.sh
+          ./compile-libuavs3d.sh clean
+          ./compile-libuavs3d.sh armv7a
+        
+
+      - uses: nttld/setup-ndk@v1
+        id: setup-ndk
+        with:
           ndk-version: r14b
           add-to-path: false
           local-cache: true
@@ -31,19 +61,14 @@ jobs:
           export PATH=$PATH:$ANDROID_SDK/platform-tools
           export PATH=$PATH:$ANDROID_NDK
           
+          cd ../../
+          
           chmod +x ./config/module-custom.sh
           chmod +x ./config/module-ok.sh
           ./init-android.sh
-          chmod +x ./init-libuavs3d.sh
-          ./init-libuavs3d.sh
           ./init-android-openssl.sh
           
           cd android/contrib
-          
-          chmod +x ./compile-libuavs3d.sh
-          chmod +x ./tools/do-compile-libuavs3d.sh
-          ./compile-libuavs3d.sh clean
-          ./compile-libuavs3d.sh armv7a
           
           ./compile-openssl.sh clean
           ./compile-openssl.sh armv7a

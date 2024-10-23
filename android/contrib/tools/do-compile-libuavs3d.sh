@@ -130,6 +130,7 @@ if [ ! -f "$FF_TOOLCHAIN_TOUCH" ]; then
     $ANDROID_NDK/build/tools/make-standalone-toolchain.sh \
         $FF_MAKE_TOOLCHAIN_FLAGS \
         --platform=$FF_ANDROID_PLATFORM \
+        --arch=$FF_ARCH \
         --toolchain=$FF_TOOLCHAIN_NAME
     touch $FF_TOOLCHAIN_TOUCH;
 fi

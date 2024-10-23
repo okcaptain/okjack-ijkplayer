@@ -1,0 +1,44 @@
+name: build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  linux:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: nttld/setup-ndk@v1
+        id: setup-ndk
+        with:
+          ndk-version: r21e
+          add-to-path: false
+          local-cache: true
+
+      - name: Compile libuavs3d
+        env:
+          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
+        run: |
+
+          ANDROID_NDK_HOME=${{ env.ANDROID_NDK_HOME }}
+          export ANDROID_SDK=$ANDROID_HOME
+          export ANDROID_NDK=$ANDROID_NDK_HOME
+          export ANDROID_NDK_ROOT=$ANDROID_NDK_HOME
+
+
+          workDir=${{ github.workspace }}
+          echo "workDir=$workDir" >> $GITHUB_ENV
+
+          chmod +x ./init-libuavs3d.sh
+          ./init-libuavs3d.sh
+
+          cd android/contrib
+          chmod +x ./compile-libuavs3d.sh
+          chmod +x ./tools/do-compile-libuavs3d.sh
+          ./compile-libuavs3d.sh clean
+          ./compile-libuavs3d.sh armv7a
+
+      - uses: actions/upload-artifact@v4.3.6
+        with:
+          name: libuavs3d-armv7a
+          path: ${{ env.workDir }}/android/contrib/build/libuavs3d-armv7a/

@@ -27,7 +27,7 @@ jobs:
           
           ls -al $ANDROID_SDK/
           ls -al $ANDROID_NDK/
-          ls -al $ANDROID_NDK/cmake
+          ls -al $ANDROID_SDK/cmake
 
 
           workDir=${{ github.workspace }}

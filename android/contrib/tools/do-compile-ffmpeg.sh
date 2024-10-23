@@ -257,7 +257,8 @@ if [ -f "${FF_DEP_OPENSSL_LIB}/libssl.a" ]; then
     FF_DEP_LIBS="$FF_DEP_LIBS -L${FF_DEP_OPENSSL_LIB} -lssl -lcrypto -luavs3d"
 
     mv $FF_DEP_LIBUAVS3D_INC/* $FF_DEP_OPENSSL_INC/
-    mv $FF_DEP_LIBUAVS3D_LIB/* $FF_DEP_OPENSSL_LIB/
+    mv $FF_DEP_LIBUAVS3D_LIB/libuavs3d.a $FF_DEP_OPENSSL_LIB/libuavs3d.a
+    mv $FF_DEP_LIBUAVS3D_LIB/pkgconfig/* $FF_DEP_OPENSSL_LIB/pkgconfig/
     echo "move uavs3d to openssl"
     ls -al $FF_DEP_OPENSSL_INC
     ls -al $FF_DEP_OPENSSL_LIB

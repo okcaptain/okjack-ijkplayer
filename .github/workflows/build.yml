@@ -34,12 +34,16 @@ jobs:
           chmod +x ./config/module-custom.sh
           chmod +x ./config/module-ok.sh
           ./init-android.sh
+          ./init-libuavs3d.sh
           ./init-android-openssl.sh
           
           cd android/contrib
           
           ./compile-openssl.sh clean
           ./compile-openssl.sh armv7a
+          
+          ./compile-libuavs3d.sh clean
+          ./compile-libuavs3d.sh armv7a
           
           ./compile-ffmpeg.sh clean
           ./compile-ffmpeg.sh armv7a

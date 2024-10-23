@@ -9,10 +9,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Unzip libuavs3d
-        run: |
-          mkdir -p android/contrib/build/libuavs3d-armv7a
-          unzip ./libuavs3d-armv7a.zip -d android/contrib/build/libuavs3d-armv7a/
+#      - name: Unzip libuavs3d
+#        run: |
+#          mkdir -p android/contrib/build/libuavs3d-armv7a
+#          unzip ./libuavs3d-armv7a.zip -d android/contrib/build/libuavs3d-armv7a/
 
       - uses: nttld/setup-ndk@v1
         id: setup-ndk
@@ -24,7 +24,7 @@ jobs:
       - name: test
         run: |
           pwd
-          ls -al ./android/contrib/build/libuavs3d-armv7a
+#          ls -al ./android/contrib/build/libuavs3d-armv7a
           sudo apt-get install libncurses5
 
       - name: Build

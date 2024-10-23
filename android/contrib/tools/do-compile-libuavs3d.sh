@@ -44,6 +44,7 @@ FF_ANDROID_ABI=armeabi-v7a
 
 FF_BUILD_NAME=
 FF_SOURCE=
+FF_CROSS_PREFIX=
 
 #--------------------
 echo ""
@@ -52,6 +53,9 @@ echo "[*] make NDK standalone toolchain"
 echo "--------------------"
 . ./tools/do-detect-env.sh
 
+FF_GCC_VER=$IJK_GCC_VER
+FF_GCC_64_VER=$IJK_GCC_64_VER
+
 
 #----- armv7a begin -----
 if [ "$FF_ARCH" = "armv7a" ]; then
@@ -59,12 +63,16 @@ if [ "$FF_ARCH" = "armv7a" ]; then
     FF_SOURCE=$FF_BUILD_ROOT/$FF_BUILD_NAME
     FF_ANDROID_ABI=armeabi-v7a
 
-
+    FF_CROSS_PREFIX=arm-linux-androideabi
+    FF_TOOLCHAIN_NAME=${FF_CROSS_PREFIX}-${FF_GCC_VER}
 
 elif [ "$FF_ARCH" = "armv5" ]; then
     FF_BUILD_NAME=libuavs3d-armv5
     FF_SOURCE=$FF_BUILD_ROOT/$FF_BUILD_NAME
     FF_ANDROID_ABI=armeabi-v7a
+
+    FF_CROSS_PREFIX=arm-linux-androideabi
+    FF_TOOLCHAIN_NAME=${FF_CROSS_PREFIX}-${FF_GCC_VER}
 
 
 elif [ "$FF_ARCH" = "x86" ]; then
@@ -72,12 +80,18 @@ elif [ "$FF_ARCH" = "x86" ]; then
     FF_SOURCE=$FF_BUILD_ROOT/$FF_BUILD_NAME
     FF_ANDROID_ABI=x86
 
+    FF_CROSS_PREFIX=i686-linux-android
+    FF_TOOLCHAIN_NAME=x86-${FF_GCC_VER}
+
 elif [ "$FF_ARCH" = "x86_64" ]; then
     FF_ANDROID_PLATFORM=android-21
 
     FF_BUILD_NAME=libuavs3d-x86_64
     FF_SOURCE=$FF_BUILD_ROOT/$FF_BUILD_NAME
     FF_ANDROID_ABI=x86_64
+
+    FF_CROSS_PREFIX=x86_64-linux-android
+    FF_TOOLCHAIN_NAME=${FF_CROSS_PREFIX}-${FF_GCC_64_VER}
 
 
 elif [ "$FF_ARCH" = "arm64" ]; then
@@ -87,6 +101,8 @@ elif [ "$FF_ARCH" = "arm64" ]; then
     FF_SOURCE=$FF_BUILD_ROOT/$FF_BUILD_NAME
     FF_ANDROID_ABI=arm64-v8a
 
+    FF_CROSS_PREFIX=aarch64-linux-android
+    FF_TOOLCHAIN_NAME=${FF_CROSS_PREFIX}-${FF_GCC_64_VER}
 
 else
     echo "unknown architecture $FF_ARCH";
@@ -101,18 +117,35 @@ FF_PREFIX=$FF_BUILD_ROOT/build/$FF_BUILD_NAME/output
 mkdir -p $FF_PREFIX
 # mkdir -p $FF_SYSROOT
 
+FF_TOOLCHAIN_TOUCH="$FF_TOOLCHAIN_PATH/touch"
+if [ ! -f "$FF_TOOLCHAIN_TOUCH" ]; then
+    $ANDROID_NDK/build/tools/make-standalone-toolchain.sh \
+        $FF_MAKE_TOOLCHAIN_FLAGS \
+        --platform=$FF_ANDROID_PLATFORM \
+        --toolchain=$FF_TOOLCHAIN_NAME
+    touch $FF_TOOLCHAIN_TOUCH;
+fi
+
+
 #--------------------
-. ./tools/do-detect-env.sh
+echo ""
+echo "--------------------"
+echo "[*] check ffmpeg env"
+echo "--------------------"
+export PATH=$FF_TOOLCHAIN_PATH/bin/:$PATH
+#export CC="ccache ${FF_CROSS_PREFIX}-gcc"
+export CC="${FF_CROSS_PREFIX}-gcc"
+export LD=${FF_CROSS_PREFIX}-ld
+export AR=${FF_CROSS_PREFIX}-ar
+export STRIP=${FF_CROSS_PREFIX}-strip
 
 
 cd $FF_SOURCE
 
 
-CMAKE_EXECUTABLE=$ANDROID_SDK/cmake/3.18.1/bin/cmake
+ls -al $FF_TOOLCHAIN_PATH/bin/
 
-ls -al .
-
-$CMAKE_EXECUTABLE . \
+cmake . \
  -DCMAKE_VERBOSE_MAKEFILE=ON \
  -DCMAKE_ANDROID_ARCH_ABI=$FF_ANDROID_ABI \
  -DANDROID_PLATFORM=$FF_ANDROID_PLATFORM \

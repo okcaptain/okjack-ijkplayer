@@ -13,6 +13,7 @@ jobs:
         with:
           ndk-version: r21e
           add-to-path: false
+          local-cache: true
 
       - name: Compile libuavs3d
         env:

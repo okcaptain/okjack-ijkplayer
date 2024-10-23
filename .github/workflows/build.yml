@@ -65,6 +65,7 @@ jobs:
 
       - name: test
         run: |
+          pwd
           ls -al ./android/contrib/libuavs3d-armv7a
           sudo apt-get install libncurses5
 
@@ -79,8 +80,6 @@ jobs:
           export PATH=$PATH:$ANDROID_SDK/tools
           export PATH=$PATH:$ANDROID_SDK/platform-tools
           export PATH=$PATH:$ANDROID_NDK
-          
-          cd ../../
           
           chmod +x ./config/module-custom.sh
           chmod +x ./config/module-ok.sh

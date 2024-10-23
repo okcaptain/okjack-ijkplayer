@@ -144,7 +144,9 @@ export STRIP=${FF_CROSS_PREFIX}-strip
 cd $FF_SOURCE
 
 
+ls -al $FF_TOOLCHAIN_PATH/
 ls -al $FF_TOOLCHAIN_PATH/bin/
+ls -al $FF_TOOLCHAIN_PATH/bin/armeabi-v7a
 
 cmake . \
  -DCMAKE_VERBOSE_MAKEFILE=ON \

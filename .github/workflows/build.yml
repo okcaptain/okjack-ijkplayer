@@ -40,13 +40,14 @@ jobs:
           
           cd android/contrib
           
-          ./compile-openssl.sh clean
-          ./compile-openssl.sh armv7a
-          
           chmod +x ./compile-libuavs3d.sh
           chmod +x ./tools/do-compile-libuavs3d.sh
           ./compile-libuavs3d.sh clean
           ./compile-libuavs3d.sh armv7a
+          
+          ./compile-openssl.sh clean
+          ./compile-openssl.sh armv7a
+          
           
           ./compile-ffmpeg.sh clean
           ./compile-ffmpeg.sh armv7a

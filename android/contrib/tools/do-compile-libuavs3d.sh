@@ -52,16 +52,28 @@ if [ "$FF_ARCH" = "armv7a" ]; then
     FF_SOURCE=$FF_BUILD_ROOT/$FF_BUILD_NAME
     FF_ANDROID_ABI=armeabi-v7a
 
+
+    FF_CROSS_PREFIX=arm-linux-androideabi
+    FF_TOOLCHAIN_NAME=${FF_CROSS_PREFIX}-${FF_GCC_VER}
+
 elif [ "$FF_ARCH" = "armv5" ]; then
     FF_BUILD_NAME=libuavs3d-armv5
     FF_SOURCE=$FF_BUILD_ROOT/$FF_BUILD_NAME
     FF_ANDROID_ABI=armeabi-v7a
 
 
+    FF_CROSS_PREFIX=arm-linux-androideabi
+    FF_TOOLCHAIN_NAME=${FF_CROSS_PREFIX}-${FF_GCC_VER}
+
+
 elif [ "$FF_ARCH" = "x86" ]; then
     FF_BUILD_NAME=libuavs3d-x86
     FF_SOURCE=$FF_BUILD_ROOT/$FF_BUILD_NAME
     FF_ANDROID_ABI=x86
+
+
+    FF_CROSS_PREFIX=i686-linux-android
+    FF_TOOLCHAIN_NAME=x86-${FF_GCC_VER}
 
 elif [ "$FF_ARCH" = "x86_64" ]; then
     FF_ANDROID_PLATFORM=android-21
@@ -71,6 +83,10 @@ elif [ "$FF_ARCH" = "x86_64" ]; then
     FF_ANDROID_ABI=x86_64
 
 
+    FF_CROSS_PREFIX=x86_64-linux-android
+    FF_TOOLCHAIN_NAME=${FF_CROSS_PREFIX}-${FF_GCC_64_VER}
+
+
 elif [ "$FF_ARCH" = "arm64" ]; then
     FF_ANDROID_PLATFORM=android-21
 
@@ -78,16 +94,57 @@ elif [ "$FF_ARCH" = "arm64" ]; then
     FF_SOURCE=$FF_BUILD_ROOT/$FF_BUILD_NAME
     FF_ANDROID_ABI=arm64-v8a
 
+
+    FF_CROSS_PREFIX=aarch64-linux-android
+    FF_TOOLCHAIN_NAME=${FF_CROSS_PREFIX}-${FF_GCC_64_VER}
+
 else
     echo "unknown architecture $FF_ARCH";
     exit 1
 fi
 
 
+FF_TOOLCHAIN_PATH=$FF_BUILD_ROOT/build/$FF_BUILD_NAME/toolchain
+FF_MAKE_TOOLCHAIN_FLAGS="$FF_MAKE_TOOLCHAIN_FLAGS --install-dir=$FF_TOOLCHAIN_PATH"
+
+FF_SYSROOT=$FF_TOOLCHAIN_PATH/sysroot
 FF_PREFIX=$FF_BUILD_ROOT/build/$FF_BUILD_NAME/output
 
 mkdir -p $FF_PREFIX
 # mkdir -p $FF_SYSROOT
+
+
+#--------------------
+echo ""
+echo "--------------------"
+echo "[*] make NDK standalone toolchain"
+echo "--------------------"
+. ./tools/do-detect-env.sh
+FF_MAKE_TOOLCHAIN_FLAGS=$IJK_MAKE_TOOLCHAIN_FLAGS
+FF_MAKE_FLAGS=$IJK_MAKE_FLAG
+
+
+FF_MAKE_TOOLCHAIN_FLAGS="$FF_MAKE_TOOLCHAIN_FLAGS --install-dir=$FF_TOOLCHAIN_PATH"
+FF_TOOLCHAIN_TOUCH="$FF_TOOLCHAIN_PATH/touch"
+if [ ! -f "$FF_TOOLCHAIN_TOUCH" ]; then
+    $ANDROID_NDK/build/tools/make-standalone-toolchain.sh \
+        $FF_MAKE_TOOLCHAIN_FLAGS \
+        --platform=$FF_ANDROID_PLATFORM \
+        --toolchain=$FF_TOOLCHAIN_NAME
+    touch $FF_TOOLCHAIN_TOUCH;
+fi
+
+
+#--------------------
+echo ""
+echo "--------------------"
+echo "[*] check libuavs3d env"
+echo "--------------------"
+export PATH=$FF_TOOLCHAIN_PATH/bin:$PATH
+export CC="${FF_CROSS_PREFIX}-gcc"
+export LD=${FF_CROSS_PREFIX}-ld
+export AR=${FF_CROSS_PREFIX}-ar
+export STRIP=${FF_CROSS_PREFIX}-strip
 
 
 

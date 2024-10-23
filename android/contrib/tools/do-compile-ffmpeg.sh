@@ -251,10 +251,16 @@ export COMMON_FF_CFG_FLAGS=
 if [ -f "${FF_DEP_OPENSSL_LIB}/libssl.a" ]; then
     echo "OpenSSL detected"
 # FF_CFG_FLAGS="$FF_CFG_FLAGS --enable-nonfree"
-    FF_CFG_FLAGS="$FF_CFG_FLAGS --enable-openssl"
+    FF_CFG_FLAGS="$FF_CFG_FLAGS --enable-openssl --enable-libuavs3d"
 
     FF_CFLAGS="$FF_CFLAGS -I${FF_DEP_OPENSSL_INC}"
-    FF_DEP_LIBS="$FF_DEP_LIBS -L${FF_DEP_OPENSSL_LIB} -lssl -lcrypto"
+    FF_DEP_LIBS="$FF_DEP_LIBS -L${FF_DEP_OPENSSL_LIB} -lssl -lcrypto -luavs3d"
+
+    mv $FF_DEP_LIBUAVS3D_INC/* $FF_DEP_OPENSSL_INC/
+    mv $FF_DEP_LIBUAVS3D_LIB/* $FF_DEP_OPENSSL_LIB/
+    echo "move uavs3d to openssl"
+    ls -al $FF_DEP_OPENSSL_INC
+    ls -al $FF_DEP_OPENSSL_LIB
 fi
 
 if [ -f "${FF_DEP_LIBSOXR_LIB}/libsoxr.a" ]; then
@@ -265,13 +271,7 @@ if [ -f "${FF_DEP_LIBSOXR_LIB}/libsoxr.a" ]; then
     FF_DEP_LIBS="$FF_DEP_LIBS -L${FF_DEP_LIBSOXR_LIB} -lsoxr"
 fi
 
-if [ -f "${FF_DEP_LIBUAVS3D_LIB}/libuavs3d.a" ]; then
-    echo "libuavs3d detected"
-    FF_CFG_FLAGS="$FF_CFG_FLAGS --enable-libuavs3d"
 
-    FF_CFLAGS="$FF_CFLAGS -I${FF_DEP_LIBUAVS3D_INC}"
-    FF_DEP_LIBS="$FF_DEP_LIBS -L${FF_DEP_LIBUAVS3D_LIB} -luavs3d -lm"
-fi
 
 FF_CFG_FLAGS="$FF_CFG_FLAGS $COMMON_FF_CFG_FLAGS"
 

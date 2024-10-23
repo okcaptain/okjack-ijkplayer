@@ -226,7 +226,12 @@ export LD=${FF_CROSS_PREFIX}-ld
 export AR=${FF_CROSS_PREFIX}-ar
 export STRIP=${FF_CROSS_PREFIX}-strip
 
-FF_CFLAGS="-O3 -Wall -pipe -std=c99 -ffast-math -fstrict-aliasing -Werror=strict-aliasing Wno-psabi -Wa,--noexecstack -DANDROID -DNDEBUG"
+FF_CFLAGS="-O3 -Wall -pipe \
+    -std=c99 \
+    -ffast-math \
+    -fstrict-aliasing -Werror=strict-aliasing \
+    -Wno-psabi -Wa,--noexecstack \
+    -DANDROID -DNDEBUG"
 
 # cause av_strlcpy crash with gcc4.7, gcc4.8
 # -fmodulo-sched -fmodulo-sched-allow-regmoves
@@ -312,8 +317,9 @@ if [ -f "./config.h" ]; then
     echo 'reuse configure'
 else
     which $CC
-    echo "./configure $FF_CFG_FLAGS --extra-cflags=$FF_CFLAGS $FF_EXTRA_CFLAGS --extra-ldflags=$FF_DEP_LIBS $FF_EXTRA_LDFLAGS"
-    ./configure $FF_CFG_FLAGS --extra-cflags="$FF_CFLAGS $FF_EXTRA_CFLAGS" --extra-ldflags="$FF_DEP_LIBS $FF_EXTRA_LDFLAGS"
+    ./configure $FF_CFG_FLAGS \
+            --extra-cflags="$FF_CFLAGS $FF_EXTRA_CFLAGS" \
+            --extra-ldflags="$FF_DEP_LIBS $FF_EXTRA_LDFLAGS"
     make clean
 fi
 

@@ -38,7 +38,7 @@ fi
 
 
 FF_BUILD_ROOT=`pwd`
-FF_ANDROID_PLATFORM=android-9
+FF_ANDROID_PLATFORM=android-16
 FF_ANDROID_ABI=armeabi-v7a
 
 

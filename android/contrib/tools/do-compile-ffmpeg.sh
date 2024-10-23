@@ -273,6 +273,8 @@ if [ -f "${FF_DEP_LIBUAVS3D_LIB}/libuavs3d.a" ]; then
     FF_DEP_LIBS="$FF_DEP_LIBS -L${FF_DEP_LIBUAVS3D_LIB} -luavs3d -lm"
 
     export PKG_CONFIG_PATH="${FF_DEP_LIBUAVS3D_LIB}/pkgconfig"
+    echo $PKG_CONFIG_PATH
+    cat $FF_DEP_LIBUAVS3D_LIB/pkgconfig/uavs3d.pc
 fi
 
 FF_CFG_FLAGS="$FF_CFG_FLAGS $COMMON_FF_CFG_FLAGS"

@@ -24,7 +24,7 @@ jobs:
       - name: test
         run: |
           pwd
-          ls -al ./android/contrib/libuavs3d-armv7a
+          ls -al ./android/contrib/build/libuavs3d-armv7a
           sudo apt-get install libncurses5
 
       - name: Build

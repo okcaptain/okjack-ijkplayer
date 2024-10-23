@@ -39,6 +39,7 @@ fi
 
 FF_BUILD_ROOT=`pwd`
 FF_ANDROID_PLATFORM=android-9
+FF_ANDROID_ABI=armeabi-v7a
 
 
 FF_BUILD_NAME=
@@ -56,23 +57,27 @@ echo "--------------------"
 if [ "$FF_ARCH" = "armv7a" ]; then
     FF_BUILD_NAME=libuavs3d-armv7a
     FF_SOURCE=$FF_BUILD_ROOT/$FF_BUILD_NAME
+    FF_ANDROID_ABI=armeabi-v7a
 
 
 
 elif [ "$FF_ARCH" = "armv5" ]; then
     FF_BUILD_NAME=libuavs3d-armv5
     FF_SOURCE=$FF_BUILD_ROOT/$FF_BUILD_NAME
+    FF_ANDROID_ABI=armeabi-v7a
 
 
 elif [ "$FF_ARCH" = "x86" ]; then
     FF_BUILD_NAME=libuavs3d-x86
     FF_SOURCE=$FF_BUILD_ROOT/$FF_BUILD_NAME
+    FF_ANDROID_ABI=x86
 
 elif [ "$FF_ARCH" = "x86_64" ]; then
     FF_ANDROID_PLATFORM=android-21
 
     FF_BUILD_NAME=libuavs3d-x86_64
     FF_SOURCE=$FF_BUILD_ROOT/$FF_BUILD_NAME
+    FF_ANDROID_ABI=x86_64
 
 
 elif [ "$FF_ARCH" = "arm64" ]; then
@@ -80,6 +85,7 @@ elif [ "$FF_ARCH" = "arm64" ]; then
 
     FF_BUILD_NAME=libuavs3d-arm64
     FF_SOURCE=$FF_BUILD_ROOT/$FF_BUILD_NAME
+    FF_ANDROID_ABI=arm64-v8a
 
 
 else
@@ -127,10 +133,10 @@ cd $FF_SOURCE
 
 cmake . \
  -DCMAKE_VERBOSE_MAKEFILE=ON \
- -DCMAKE_ANDROID_ARCH_ABI=$FF_ARCH \
+ -DCMAKE_ANDROID_ARCH_ABI=$FF_ANDROID_ABI \
  -DANDROID_PLATFORM=$FF_ANDROID_PLATFORM \
- -DPROJECT_ABI=$FF_ARCH \
- -DANDROID_ABI=$FF_ARCH \
+ -DPROJECT_ABI=$FF_ANDROID_ABI \
+ -DANDROID_ABI=$FF_ANDROID_ABI \
  -DANDROID_NDK=$ANDROID_NDK \
  -DCMAKE_ANDROID_NDK=$ANDROID_NDK \
  -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake \

@@ -31,8 +31,6 @@ jobs:
           export PATH=$PATH:$ANDROID_SDK/platform-tools
           export PATH=$PATH:$ANDROID_NDK
           
-          ls -al $ANDROID_NDK/cmake/
-          
           chmod +x ./config/module-custom.sh
           chmod +x ./config/module-ok.sh
           ./init-android.sh

@@ -150,7 +150,6 @@ fi
 
 ls -al $FF_TOOLCHAIN_PATH
 ls -al $FF_TOOLCHAIN_PATH/bin/
-exit
 
 
 #--------------------

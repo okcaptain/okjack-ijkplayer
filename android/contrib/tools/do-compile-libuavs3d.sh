@@ -138,7 +138,17 @@ fi
 ls -al $FF_TOOLCHAIN_PATH
 ls -al $FF_TOOLCHAIN_PATH/bin/
 
+#--------------------
+echo ""
+echo "--------------------"
+echo "[*] check libuavs3d env"
+echo "--------------------"
+export PATH=$FF_TOOLCHAIN_PATH/bin:$PATH
 
+export CC="${FF_CROSS_PREFIX}-gcc"
+export LD=${FF_CROSS_PREFIX}-ld
+export AR=${FF_CROSS_PREFIX}-ar
+export STRIP=${FF_CROSS_PREFIX}-strip
 
 
 cd $FF_SOURCE

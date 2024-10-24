@@ -196,7 +196,6 @@ echo ""
 echo "--------------------"
 echo "[*] compile openssl"
 echo "--------------------"
-make depend
 make $FF_MAKE_FLAGS
 make install_sw
 

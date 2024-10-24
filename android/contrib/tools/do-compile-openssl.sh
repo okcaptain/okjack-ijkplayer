@@ -36,7 +36,7 @@ fi
 
 FF_BUILD_ROOT=`pwd`
 FF_ANDROID_PLATFORM=android-16
-
+ANDROID_API=16
 
 FF_BUILD_NAME=
 FF_SOURCE=
@@ -94,6 +94,7 @@ elif [ "$FF_ARCH" = "x86" ]; then
 
 elif [ "$FF_ARCH" = "x86_64" ]; then
     FF_ANDROID_PLATFORM=android-21
+    ANDROID_API=21
 
     FF_BUILD_NAME=openssl-x86_64
     FF_SOURCE=$FF_BUILD_ROOT/$FF_BUILD_NAME
@@ -105,6 +106,7 @@ elif [ "$FF_ARCH" = "x86_64" ]; then
 
 elif [ "$FF_ARCH" = "arm64" ]; then
     FF_ANDROID_PLATFORM=android-21
+    ANDROID_API=21
 
     FF_BUILD_NAME=openssl-arm64
     FF_SOURCE=$FF_BUILD_ROOT/$FF_BUILD_NAME
@@ -175,7 +177,8 @@ FF_CFG_FLAGS="$FF_CFG_FLAGS zlib-dynamic"
 FF_CFG_FLAGS="$FF_CFG_FLAGS no-shared"
 FF_CFG_FLAGS="$FF_CFG_FLAGS --openssldir=$FF_PREFIX"
 FF_CFG_FLAGS="$FF_CFG_FLAGS --cross-compile-prefix=${FF_CROSS_PREFIX}-"
-FF_CFG_FLAGS="$FF_CFG_FLAGS $FF_PLATFORM_CFG_FLAGS"
+FF_CFG_FLAGS="$FF_CFG_FLAGS --openssldir=$FF_PREFIX"
+FF_CFG_FLAGS="$FF_CFG_FLAGS -D__ANDROID_API__=$ANDROID_API"
 
 #--------------------
 echo ""

@@ -37,6 +37,7 @@ fi
 FF_BUILD_ROOT=`pwd`
 FF_ANDROID_PLATFORM=android-16
 
+
 FF_BUILD_NAME=
 FF_SOURCE=
 FF_CROSS_PREFIX=
@@ -65,7 +66,7 @@ FF_GCC_64_VER=$IJK_GCC_64_VER
 if [ "$FF_ARCH" = "armv7a" ]; then
     FF_BUILD_NAME=openssl-armv7a
     FF_SOURCE=$FF_BUILD_ROOT/$FF_BUILD_NAME
-	
+
     FF_CROSS_PREFIX=arm-linux-androideabi
 	FF_TOOLCHAIN_NAME=${FF_CROSS_PREFIX}-${FF_GCC_VER}
 
@@ -74,7 +75,7 @@ if [ "$FF_ARCH" = "armv7a" ]; then
 elif [ "$FF_ARCH" = "armv5" ]; then
     FF_BUILD_NAME=openssl-armv5
     FF_SOURCE=$FF_BUILD_ROOT/$FF_BUILD_NAME
-	
+
     FF_CROSS_PREFIX=arm-linux-androideabi
 	FF_TOOLCHAIN_NAME=${FF_CROSS_PREFIX}-${FF_GCC_VER}
 
@@ -83,7 +84,7 @@ elif [ "$FF_ARCH" = "armv5" ]; then
 elif [ "$FF_ARCH" = "x86" ]; then
     FF_BUILD_NAME=openssl-x86
     FF_SOURCE=$FF_BUILD_ROOT/$FF_BUILD_NAME
-	
+
     FF_CROSS_PREFIX=i686-linux-android
 	FF_TOOLCHAIN_NAME=x86-${FF_GCC_VER}
 
@@ -93,7 +94,6 @@ elif [ "$FF_ARCH" = "x86" ]; then
 
 elif [ "$FF_ARCH" = "x86_64" ]; then
     FF_ANDROID_PLATFORM=android-21
-    ANDROID_API=21
 
     FF_BUILD_NAME=openssl-x86_64
     FF_SOURCE=$FF_BUILD_ROOT/$FF_BUILD_NAME
@@ -105,7 +105,6 @@ elif [ "$FF_ARCH" = "x86_64" ]; then
 
 elif [ "$FF_ARCH" = "arm64" ]; then
     FF_ANDROID_PLATFORM=android-21
-    ANDROID_API=21
 
     FF_BUILD_NAME=openssl-arm64
     FF_SOURCE=$FF_BUILD_ROOT/$FF_BUILD_NAME
@@ -149,9 +148,6 @@ if [ ! -f "$FF_TOOLCHAIN_TOUCH" ]; then
     touch $FF_TOOLCHAIN_TOUCH;
 fi
 
-ls -al $FF_TOOLCHAIN_PATH
-ls -al $FF_TOOLCHAIN_PATH/bin/
-
 
 #--------------------
 echo ""
@@ -159,11 +155,6 @@ echo "--------------------"
 echo "[*] check openssl env"
 echo "--------------------"
 export PATH=$FF_TOOLCHAIN_PATH/bin:$PATH
-#export CC="ccache ${FF_CROSS_PREFIX}-gcc"
-export CC="${FF_CROSS_PREFIX}-gcc"
-export LD=${FF_CROSS_PREFIX}-ld
-export AR=${FF_CROSS_PREFIX}-ar
-export STRIP=${FF_CROSS_PREFIX}-strip
 
 export COMMON_FF_CFG_FLAGS=
 
@@ -176,7 +167,6 @@ FF_CFG_FLAGS="$FF_CFG_FLAGS no-shared"
 FF_CFG_FLAGS="$FF_CFG_FLAGS --openssldir=$FF_PREFIX"
 FF_CFG_FLAGS="$FF_CFG_FLAGS --cross-compile-prefix=${FF_CROSS_PREFIX}-"
 FF_CFG_FLAGS="$FF_CFG_FLAGS $FF_PLATFORM_CFG_FLAGS"
-
 
 #--------------------
 echo ""

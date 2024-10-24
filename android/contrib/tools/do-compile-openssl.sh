@@ -70,7 +70,7 @@ if [ "$FF_ARCH" = "armv7a" ]; then
     FF_CROSS_PREFIX=arm-linux-androideabi
 	FF_TOOLCHAIN_NAME=${FF_CROSS_PREFIX}-${FF_GCC_VER}
 
-    FF_PLATFORM_CFG_FLAGS="android-arm"
+    FF_PLATFORM_CFG_FLAGS="android-armv7"
 
 elif [ "$FF_ARCH" = "armv5" ]; then
     FF_BUILD_NAME=openssl-armv5
@@ -79,7 +79,7 @@ elif [ "$FF_ARCH" = "armv5" ]; then
     FF_CROSS_PREFIX=arm-linux-androideabi
 	FF_TOOLCHAIN_NAME=${FF_CROSS_PREFIX}-${FF_GCC_VER}
 
-    FF_PLATFORM_CFG_FLAGS="android-armeabi"
+    FF_PLATFORM_CFG_FLAGS="android"
 
 elif [ "$FF_ARCH" = "x86" ]; then
     FF_BUILD_NAME=openssl-x86
@@ -159,10 +159,6 @@ echo "[*] check openssl env"
 echo "--------------------"
 export PATH=$FF_TOOLCHAIN_PATH/bin:$PATH
 #export CC="ccache ${FF_CROSS_PREFIX}-gcc"
-export CC="${FF_CROSS_PREFIX}-clang"
-export LD=${FF_CROSS_PREFIX}-ld
-export AR=${FF_CROSS_PREFIX}-ar
-export STRIP=${FF_CROSS_PREFIX}-strip
 
 export COMMON_FF_CFG_FLAGS=
 

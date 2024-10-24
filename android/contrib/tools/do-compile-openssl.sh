@@ -148,6 +148,10 @@ if [ ! -f "$FF_TOOLCHAIN_TOUCH" ]; then
     touch $FF_TOOLCHAIN_TOUCH;
 fi
 
+ls -al $FF_TOOLCHAIN_PATH
+ls -al $FF_TOOLCHAIN_PATH/bin/
+exit
+
 
 #--------------------
 echo ""

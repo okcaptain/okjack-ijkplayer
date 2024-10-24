@@ -262,6 +262,9 @@ if [ -f "${FF_DEP_OPENSSL_LIB}/libssl.a" ]; then
     echo "move uavs3d to openssl"
     ls -al $FF_DEP_OPENSSL_INC
     ls -al $FF_DEP_OPENSSL_LIB
+
+    echo $FF_CFLAGS
+    echo $FF_DEP_LIBS
 fi
 
 if [ -f "${FF_DEP_LIBSOXR_LIB}/libsoxr.a" ]; then

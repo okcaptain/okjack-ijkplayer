@@ -8,23 +8,16 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-
-      - name: Unzip libuavs3d
-        run: |
-          mkdir -p android/contrib/build/libuavs3d-armv7a
-          unzip ./libuavs3d-armv7a.zip -d android/contrib/build/libuavs3d-armv7a/
-
       - uses: nttld/setup-ndk@v1
         id: setup-ndk
         with:
-          ndk-version: r14b
+          ndk-version: r21b
           add-to-path: false
           local-cache: true
 
       - name: test
         run: |
           pwd
-          ls -al ./android/contrib/build/libuavs3d-armv7a
           sudo apt-get install libncurses5
 
       - name: Build
@@ -44,7 +37,17 @@ jobs:
           ./init-android.sh
           ./init-android-openssl.sh
           
+          chmod +x ./init-libuavs3d.sh
+          ./init-libuavs3d.sh
+          
           cd android/contrib
+          
+          chmod +x ./compile-libuavs3d.sh
+          chmod +x ./tools/do-compile-libuavs3d.sh
+          
+          ./compile-libuavs3d.sh clean
+          ./compile-libuavs3d.sh armv7a
+          
           
           ./compile-openssl.sh clean
           ./compile-openssl.sh armv7a

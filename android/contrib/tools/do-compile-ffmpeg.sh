@@ -251,10 +251,10 @@ export COMMON_FF_CFG_FLAGS=
 if [ -f "${FF_DEP_OPENSSL_LIB}/libssl.a" ]; then
     echo "OpenSSL detected"
 # FF_CFG_FLAGS="$FF_CFG_FLAGS --enable-nonfree"
-    FF_CFG_FLAGS="$FF_CFG_FLAGS --enable-openssl --enable-libuavs3d"
+    FF_CFG_FLAGS="$FF_CFG_FLAGS --enable-openssl"
 
     FF_CFLAGS="$FF_CFLAGS -I${FF_DEP_OPENSSL_INC}"
-    FF_DEP_LIBS="$FF_DEP_LIBS -L${FF_DEP_OPENSSL_LIB} -lssl -lcrypto -luavs3d"
+    FF_DEP_LIBS="$FF_DEP_LIBS -L${FF_DEP_OPENSSL_LIB} -lssl -lcrypto"
 
     mv $FF_DEP_LIBUAVS3D_INC/* $FF_DEP_OPENSSL_INC/
     mv $FF_DEP_LIBUAVS3D_LIB/libuavs3d.a $FF_DEP_OPENSSL_LIB/libuavs3d.a

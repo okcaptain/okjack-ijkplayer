@@ -19,7 +19,7 @@
 # IJK_FFMPEG_UPSTREAM=git://git.videolan.org/ffmpeg.git
 IJK_FFMPEG_UPSTREAM=https://github.com/okcaptain/BiliFFmpeg.git
 IJK_FFMPEG_FORK=https://github.com/okcaptain/BiliFFmpeg.git
-IJK_FFMPEG_COMMIT=okjack-ijk-20241024
+IJK_FFMPEG_COMMIT=okjack-ijk-20241024-01
 IJK_FFMPEG_LOCAL_REPO=extra/ffmpeg
 
 set -e

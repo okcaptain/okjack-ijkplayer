@@ -159,10 +159,10 @@ echo "[*] check openssl env"
 echo "--------------------"
 export PATH=$FF_TOOLCHAIN_PATH/bin:$PATH
 #export CC="ccache ${FF_CROSS_PREFIX}-gcc"
-export CC="clang"
-export LD=ld
-export AR=ar
-export STRIP=strip
+export CC="${FF_CROSS_PREFIX}-clang"
+export LD=${FF_CROSS_PREFIX}-ld
+export AR=${FF_CROSS_PREFIX}-ar
+export STRIP=${FF_CROSS_PREFIX}-strip
 
 export COMMON_FF_CFG_FLAGS=
 

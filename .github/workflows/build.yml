@@ -18,7 +18,7 @@ jobs:
       - name: test
         run: |
           pwd
-          sudo apt-get install libncurses5 python
+          sudo apt-get install libncurses5
 
       - name: Build
         env:

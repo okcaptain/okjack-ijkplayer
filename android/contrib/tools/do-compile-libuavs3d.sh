@@ -144,6 +144,7 @@ echo "--------------------"
 echo "[*] check libuavs3d env"
 echo "--------------------"
 export PATH=$FF_TOOLCHAIN_PATH/bin:$PATH
+export PATH=$ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin:$PATH
 
 export CC="${FF_CROSS_PREFIX}-clang"
 export LD=${FF_CROSS_PREFIX}-ld

@@ -144,9 +144,8 @@ echo "--------------------"
 echo "[*] check libuavs3d env"
 echo "--------------------"
 export PATH=$FF_TOOLCHAIN_PATH/bin:$PATH
-export PATH=$ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin:$PATH
 
-export CC="${FF_CROSS_PREFIX}-clang"
+export CC="${FF_CROSS_PREFIX}-gcc"
 export LD=${FF_CROSS_PREFIX}-ld
 export AR=${FF_CROSS_PREFIX}-ar
 export STRIP=${FF_CROSS_PREFIX}-strip
@@ -164,7 +163,7 @@ $CMAKE_EXECUTABLE . \
  -DPROJECT_ABI=$FF_ANDROID_ABI \
  -DANDROID_ABI=$FF_ANDROID_ABI \
  -DANDROID_NDK=$ANDROID_NDK \
- -DANDROID_TOOLCHAIN=clang \
+ -DANDROID_TOOLCHAIN=gcc \
  -DCMAKE_ANDROID_NDK=$ANDROID_NDK \
  -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake \
  -DCMAKE_INSTALL_PREFIX=$FF_PREFIX \

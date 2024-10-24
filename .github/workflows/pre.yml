@@ -11,7 +11,7 @@ jobs:
       - uses: nttld/setup-ndk@v1
         id: setup-ndk
         with:
-          ndk-version: r21b
+          ndk-version: r14b
           add-to-path: false
           local-cache: true
 
@@ -28,6 +28,9 @@ jobs:
           ls -al $ANDROID_SDK/
           ls -al $ANDROID_NDK/
           ls -al $ANDROID_SDK/cmake
+  
+  
+          cat $ANDROID_NDK/build/cmake/android.toolchain.cmake
 
 
           workDir=${{ github.workspace }}

@@ -266,13 +266,13 @@ if [ -f "${FF_DEP_LIBSOXR_LIB}/libsoxr.a" ]; then
     FF_DEP_LIBS="$FF_DEP_LIBS -L${FF_DEP_LIBSOXR_LIB} -lsoxr"
 fi
 
-if [ -f "${FF_DEP_LIBUAVS3D_LIB}/libuavs3d.a" ]; then
-    echo "libuavs3d detected"
-    FF_CFG_FLAGS="$FF_CFG_FLAGS --enable-libuavs3d"
-
-    FF_CFLAGS="$FF_CFLAGS -I${FF_DEP_LIBUAVS3D_INC}"
-    FF_DEP_LIBS="$FF_DEP_LIBS -L${FF_DEP_LIBUAVS3D_LIB} -luavs3d -lm"
-fi
+#if [ -f "${FF_DEP_LIBUAVS3D_LIB}/libuavs3d.a" ]; then
+#    echo "libuavs3d detected"
+#    FF_CFG_FLAGS="$FF_CFG_FLAGS --enable-libuavs3d"
+#
+#    FF_CFLAGS="$FF_CFLAGS -I${FF_DEP_LIBUAVS3D_INC}"
+#    FF_DEP_LIBS="$FF_DEP_LIBS -L${FF_DEP_LIBUAVS3D_LIB} -luavs3d -lm"
+#fi
 
 
 

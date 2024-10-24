@@ -219,7 +219,7 @@ echo ""
 echo "--------------------"
 echo "[*] check ffmpeg env"
 echo "--------------------"
-export PATH=$FF_TOOLCHAIN_PATH/bin/:$PATH
+export PATH=$FF_TOOLCHAIN_PATH/bin:$PATH
 #export CC="ccache ${FF_CROSS_PREFIX}-gcc"
 export CC="${FF_CROSS_PREFIX}-gcc"
 export LD=${FF_CROSS_PREFIX}-ld
@@ -319,6 +319,7 @@ if [ -f "./config.h" ]; then
     echo 'reuse configure'
 else
     which $CC
+    echo "./configure $FF_CFG_FLAGS --extra-cflags=$FF_CFLAGS $FF_EXTRA_CFLAGS --extra-ldflags=$FF_DEP_LIBS $FF_EXTRA_LDFLAGS"
     ./configure $FF_CFG_FLAGS \
             --extra-cflags="$FF_CFLAGS $FF_EXTRA_CFLAGS" \
             --extra-ldflags="$FF_DEP_LIBS $FF_EXTRA_LDFLAGS"

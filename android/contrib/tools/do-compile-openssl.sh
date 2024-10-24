@@ -70,7 +70,7 @@ if [ "$FF_ARCH" = "armv7a" ]; then
     FF_CROSS_PREFIX=arm-linux-androideabi
 	FF_TOOLCHAIN_NAME=${FF_CROSS_PREFIX}-${FF_GCC_VER}
 
-    FF_PLATFORM_CFG_FLAGS="android-arm"
+    FF_PLATFORM_CFG_FLAGS="android-arm -D__ANDROID_API__=${ANDROID_API}"
 
 elif [ "$FF_ARCH" = "armv5" ]; then
     FF_BUILD_NAME=openssl-armv5
@@ -79,7 +79,7 @@ elif [ "$FF_ARCH" = "armv5" ]; then
     FF_CROSS_PREFIX=arm-linux-androideabi
 	FF_TOOLCHAIN_NAME=${FF_CROSS_PREFIX}-${FF_GCC_VER}
 
-    FF_PLATFORM_CFG_FLAGS="android-armeabi"
+    FF_PLATFORM_CFG_FLAGS="android-armeabi -D__ANDROID_API__=${ANDROID_API}"
 
 elif [ "$FF_ARCH" = "x86" ]; then
     FF_BUILD_NAME=openssl-x86
@@ -88,7 +88,7 @@ elif [ "$FF_ARCH" = "x86" ]; then
     FF_CROSS_PREFIX=i686-linux-android
 	FF_TOOLCHAIN_NAME=x86-${FF_GCC_VER}
 
-    FF_PLATFORM_CFG_FLAGS="android-x86"
+    FF_PLATFORM_CFG_FLAGS="android-x86 -D__ANDROID_API__=${ANDROID_API}"
 
     FF_CFG_FLAGS="$FF_CFG_FLAGS no-asm"
 
@@ -102,7 +102,7 @@ elif [ "$FF_ARCH" = "x86_64" ]; then
     FF_CROSS_PREFIX=x86_64-linux-android
     FF_TOOLCHAIN_NAME=${FF_CROSS_PREFIX}-${FF_GCC_64_VER}
 
-    FF_PLATFORM_CFG_FLAGS="linux-x86_64"
+    FF_PLATFORM_CFG_FLAGS="linux-x86_64 -D__ANDROID_API__=${ANDROID_API}"
 
 elif [ "$FF_ARCH" = "arm64" ]; then
     FF_ANDROID_PLATFORM=android-21
@@ -114,7 +114,7 @@ elif [ "$FF_ARCH" = "arm64" ]; then
     FF_CROSS_PREFIX=aarch64-linux-android
     FF_TOOLCHAIN_NAME=${FF_CROSS_PREFIX}-${FF_GCC_64_VER}
 
-    FF_PLATFORM_CFG_FLAGS="linux-aarch64"
+    FF_PLATFORM_CFG_FLAGS="linux-aarch64 -D__ANDROID_API__=${ANDROID_API}"
 
 else
     echo "unknown architecture $FF_ARCH";
@@ -177,8 +177,7 @@ FF_CFG_FLAGS="$FF_CFG_FLAGS zlib-dynamic"
 FF_CFG_FLAGS="$FF_CFG_FLAGS no-shared"
 FF_CFG_FLAGS="$FF_CFG_FLAGS --openssldir=$FF_PREFIX"
 FF_CFG_FLAGS="$FF_CFG_FLAGS --cross-compile-prefix=${FF_CROSS_PREFIX}-"
-FF_CFG_FLAGS="$FF_CFG_FLAGS --openssldir=$FF_PREFIX"
-FF_CFG_FLAGS="$FF_CFG_FLAGS -D__ANDROID_API__=$ANDROID_API"
+FF_CFG_FLAGS="$FF_CFG_FLAGS $FF_PLATFORM_CFG_FLAGS"
 
 #--------------------
 echo ""

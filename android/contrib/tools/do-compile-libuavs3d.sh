@@ -109,7 +109,7 @@ else
 fi
 
 
-FF_TOOLCHAIN_PATH=$FF_BUILD_ROOT/build/$FF_ARCH/toolchain
+FF_TOOLCHAIN_PATH=$FF_BUILD_ROOT/build/$FF_BUILD_NAME/toolchain
 FF_PREFIX=$FF_BUILD_ROOT/build/$FF_BUILD_NAME/output
 
 mkdir -p $FF_PREFIX

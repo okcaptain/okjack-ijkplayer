@@ -176,5 +176,7 @@ make
 make install
 
 ls -al $FF_PREFIX
+ls -al $FF_PREFIX/lib/
+ls -al $FF_PREFIX/include/
 
 

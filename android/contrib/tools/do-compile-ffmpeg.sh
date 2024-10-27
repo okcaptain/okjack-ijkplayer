@@ -292,12 +292,10 @@ FF_CFG_FLAGS="$FF_CFG_FLAGS $COMMON_FF_CFG_FLAGS"
 FF_CFG_FLAGS="$FF_CFG_FLAGS --prefix=$FF_PREFIX"
 
 # Advanced options (experts only):
-LDVAR="g++"
 FF_CFG_FLAGS="$FF_CFG_FLAGS --cross-prefix=${FF_CROSS_PREFIX}-"
 FF_CFG_FLAGS="$FF_CFG_FLAGS --enable-cross-compile"
 FF_CFG_FLAGS="$FF_CFG_FLAGS --target-os=linux"
 FF_CFG_FLAGS="$FF_CFG_FLAGS --enable-pic"
-FF_CFG_FLAGS="$FF_CFG_FLAGS --ld=$LDVAR"
 # FF_CFG_FLAGS="$FF_CFG_FLAGS --disable-symver"
 
 if [ "$FF_ARCH" = "x86" ]; then

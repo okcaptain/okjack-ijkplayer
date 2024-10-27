@@ -55,7 +55,7 @@ FF_DEP_LIBSOXR_LIB=
 FF_CFG_FLAGS=
 
 FF_EXTRA_CFLAGS=
-FF_EXTRA_LDFLAGS=
+FF_EXTRA_LDFLAGS=-ldl
 FF_DEP_LIBS=
 
 FF_MODULE_DIRS="compat libavcodec libavfilter libavformat libavutil libswresample libswscale"
@@ -77,6 +77,7 @@ FF_GCC_64_VER=$IJK_GCC_64_VER
 #----- armv7a begin -----
 if [ "$FF_ARCH" = "armv7a" ]; then
     FF_BUILD_NAME=ffmpeg-armv7a
+    FF_BUILD_NAME_LIBARCDAV3A=libarcdav3a-armv7a
     FF_BUILD_NAME_LIBUAVS3D=libuavs3d-armv7a
     FF_BUILD_NAME_OPENSSL=openssl-armv7a
     FF_BUILD_NAME_LIBSOXR=libsoxr-armv7a
@@ -96,6 +97,7 @@ if [ "$FF_ARCH" = "armv7a" ]; then
 
 elif [ "$FF_ARCH" = "armv5" ]; then
     FF_BUILD_NAME=ffmpeg-armv5
+    FF_BUILD_NAME_LIBARCDAV3A=libarcdav3a-armv5
     FF_BUILD_NAME_LIBUAVS3D=libuavs3d-armv5
     FF_BUILD_NAME_OPENSSL=openssl-armv5
     FF_BUILD_NAME_LIBSOXR=libsoxr-armv5
@@ -113,6 +115,7 @@ elif [ "$FF_ARCH" = "armv5" ]; then
 
 elif [ "$FF_ARCH" = "x86" ]; then
     FF_BUILD_NAME=ffmpeg-x86
+    FF_BUILD_NAME_LIBARCDAV3A=libarcdav3a-x86
     FF_BUILD_NAME_LIBUAVS3D=libuavs3d-x86
     FF_BUILD_NAME_OPENSSL=openssl-x86
     FF_BUILD_NAME_LIBSOXR=libsoxr-x86
@@ -132,6 +135,7 @@ elif [ "$FF_ARCH" = "x86_64" ]; then
     FF_ANDROID_PLATFORM=android-21
 
     FF_BUILD_NAME=ffmpeg-x86_64
+    FF_BUILD_NAME_LIBARCDAV3A=libarcdav3a-x86_64
     FF_BUILD_NAME_LIBUAVS3D=libuavs3d-x86_64
     FF_BUILD_NAME_OPENSSL=openssl-x86_64
     FF_BUILD_NAME_LIBSOXR=libsoxr-x86_64
@@ -151,6 +155,7 @@ elif [ "$FF_ARCH" = "arm64" ]; then
     FF_ANDROID_PLATFORM=android-21
 
     FF_BUILD_NAME=ffmpeg-arm64
+    FF_BUILD_NAME_LIBARCDAV3A=libarcdav3a-arm64
     FF_BUILD_NAME_LIBUAVS3D=libuavs3d-arm64
     FF_BUILD_NAME_OPENSSL=openssl-arm64
     FF_BUILD_NAME_LIBSOXR=libsoxr-arm64
@@ -222,6 +227,7 @@ echo "--------------------"
 export PATH=$FF_TOOLCHAIN_PATH/bin:$PATH
 #export CC="ccache ${FF_CROSS_PREFIX}-gcc"
 export CC="${FF_CROSS_PREFIX}-gcc"
+export CXX="${FF_CROSS_PREFIX}-g++"
 export LD=${FF_CROSS_PREFIX}-ld
 export AR=${FF_CROSS_PREFIX}-ar
 export STRIP=${FF_CROSS_PREFIX}-strip
@@ -273,6 +279,10 @@ if [ -f "${FF_DEP_LIBUAVS3D_LIB}/libuavs3d.a" ]; then
     FF_DEP_LIBS="$FF_DEP_LIBS -L${FF_DEP_LIBUAVS3D_LIB} -luavs3d"
 fi
 
+FF_CFG_FLAGS="$FF_CFG_FLAGS --enable-libarcdav3a"
+export LD_LIBRARY_PATH=$FF_BUILD_ROOT/$FF_BUILD_NAME_LIBARCDAV3A:$LD_LIBRARY_PATH
+echo $LD_LIBRARY_PATH
+
 
 
 FF_CFG_FLAGS="$FF_CFG_FLAGS $COMMON_FF_CFG_FLAGS"
@@ -282,10 +292,12 @@ FF_CFG_FLAGS="$FF_CFG_FLAGS $COMMON_FF_CFG_FLAGS"
 FF_CFG_FLAGS="$FF_CFG_FLAGS --prefix=$FF_PREFIX"
 
 # Advanced options (experts only):
+LDVAR="g++"
 FF_CFG_FLAGS="$FF_CFG_FLAGS --cross-prefix=${FF_CROSS_PREFIX}-"
 FF_CFG_FLAGS="$FF_CFG_FLAGS --enable-cross-compile"
 FF_CFG_FLAGS="$FF_CFG_FLAGS --target-os=linux"
 FF_CFG_FLAGS="$FF_CFG_FLAGS --enable-pic"
+FF_CFG_FLAGS="$FF_CFG_FLAGS --ld=$LDVAR"
 # FF_CFG_FLAGS="$FF_CFG_FLAGS --disable-symver"
 
 if [ "$FF_ARCH" = "x86" ]; then

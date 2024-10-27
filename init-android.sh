@@ -36,6 +36,7 @@ function pull_fork()
     sh $TOOLS/pull-repo-ref.sh $IJK_FFMPEG_FORK android/contrib/ffmpeg-$1 ${IJK_FFMPEG_LOCAL_REPO}
     cd android/contrib/ffmpeg-$1
     cp ../../model.bin .
+    ls -al .
     git checkout ${IJK_FFMPEG_COMMIT} -B ijkplayer
     cd -
 }

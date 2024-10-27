@@ -2,6 +2,11 @@ name: build
 
 on:
   workflow_dispatch:
+    inputs:
+      fftag:
+        description: 'tag of ff'
+        required: true
+        default: '---'
 
 jobs:
   linux:
@@ -34,7 +39,7 @@ jobs:
           
           chmod +x ./config/module-custom.sh
           chmod +x ./config/module-ok.sh
-          ./init-android.sh
+          ./init-android.sh ${{ inputs.fftag }}
           ./init-android-openssl.sh
           
           chmod +x ./init-libuavs3d.sh

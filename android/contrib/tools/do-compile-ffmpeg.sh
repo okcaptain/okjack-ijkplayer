@@ -409,6 +409,9 @@ mkdir -p $FF_PREFIX/shared/lib/pkgconfig
 ln -s $FF_PREFIX/include $FF_PREFIX/shared/include
 ln -s $FF_PREFIX/libijkffmpeg.so $FF_PREFIX/shared/lib/libijkffmpeg.so
 cp $FF_PREFIX/lib/pkgconfig/*.pc $FF_PREFIX/shared/lib/pkgconfig
+
+cp $FF_DEP_LIBAV3AD_LIB/libav3ad.so $FF_PREFIX/libav3ad.so
+
 for f in $FF_PREFIX/lib/pkgconfig/*.pc; do
     # in case empty dir
     if [ ! -f $f ]; then

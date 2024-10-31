@@ -287,7 +287,7 @@ if [ -f "${FF_DEP_LIBAV3AD_LIB}/libav3ad.so" ]; then
     FF_CFG_FLAGS="$FF_CFG_FLAGS --enable-libav3ad"
 
     FF_CFLAGS="$FF_CFLAGS -I${FF_DEP_LIBAV3AD_INC}"
-    FF_DEP_LIBS="$FF_DEP_LIBS -L${FF_DEP_LIBAV3AD_LIB} -lav3ad"
+    FF_DEP_LIBS="$FF_DEP_LIBS -L${FF_DEP_LIBAV3AD_LIB} -lav3ad -lm"
 fi
 
 

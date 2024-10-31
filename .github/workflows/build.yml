@@ -7,6 +7,10 @@ on:
         description: 'tag of ff'
         required: true
         default: '---'
+      abi:
+        description: 'android abi'
+        required: true
+        default: 'armv7a'
 
 jobs:
   linux:
@@ -49,26 +53,26 @@ jobs:
           
           
           ./compile-openssl.sh clean
-          ./compile-openssl.sh armv7a
+          ./compile-openssl.sh ${{ inputs.abi }}
 
           chmod +x ./compile-libav3ad.sh
           chmod +x ./tools/do-compile-libav3ad.sh
           
           
           ./compile-libav3ad.sh clean
-          ./compile-libav3ad.sh armv7a
+          ./compile-libav3ad.sh ${{ inputs.abi }}
           
           ./compile-ffmpeg.sh clean
-          ./compile-ffmpeg.sh armv7a
+          ./compile-ffmpeg.sh ${{ inputs.abi }}
           
           cd ..  
-          ./compile-ijk.sh armv7a
+          ./compile-ijk.sh ${{ inputs.abi }}
 
 
       - uses: actions/upload-artifact@v4
         with:
           name: ijk
-          path: ./android/ijkplayer/ijkplayer-armv7a
+          path: ./android/ijkplayer/ijkplayer-${{ inputs.abi }}
 
 
 

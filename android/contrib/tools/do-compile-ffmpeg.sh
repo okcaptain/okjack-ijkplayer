@@ -164,7 +164,7 @@ elif [ "$FF_ARCH" = "arm64" ]; then
     FF_CROSS_PREFIX=aarch64-linux-android
     FF_TOOLCHAIN_NAME=${FF_CROSS_PREFIX}-${FF_GCC_64_VER}
 
-    FF_CFG_FLAGS="$FF_CFG_FLAGS --arch=aarch64 --cpu=armv8-a --enable-yasm"
+    FF_CFG_FLAGS="$FF_CFG_FLAGS --arch=aarch64 --enable-yasm"
 
     FF_EXTRA_CFLAGS="$FF_EXTRA_CFLAGS"
     FF_EXTRA_LDFLAGS="$FF_EXTRA_LDFLAGS"
@@ -281,14 +281,7 @@ if [ -f "${FF_DEP_LIBUAVS3D_LIB}/libuavs3d.a" ]; then
     FF_DEP_LIBS="$FF_DEP_LIBS -L${FF_DEP_LIBUAVS3D_LIB} -luavs3d"
 fi
 
-if [ -f "${FF_DEP_LIBAV3AD_LIB}/libav3ad.so" ]; then
-    echo "libav3ad detected"
 
-    FF_CFG_FLAGS="$FF_CFG_FLAGS --enable-libav3ad"
-
-    FF_CFLAGS="$FF_CFLAGS -I${FF_DEP_LIBAV3AD_INC}"
-    FF_DEP_LIBS="$FF_DEP_LIBS -L${FF_DEP_LIBAV3AD_LIB} -lav3ad"
-fi
 
 
 

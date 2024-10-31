@@ -1140,9 +1140,7 @@ LABEL_RETURN:
     return;
 }
 
-
-static jobject
-getApplication(JNIEnv *env) {
+jobject getApplication(JNIEnv *env) {
     jclass localClass = (*env)->FindClass(env, "android/app/ActivityThread");
     if (localClass != NULL) {
         jmethodID getapplication = (*env)->GetStaticMethodID(env, localClass, "currentApplication", "()Landroid/app/Application;");
@@ -1155,8 +1153,7 @@ getApplication(JNIEnv *env) {
     return NULL;
 }
 
-static void
-exitApplication(JNIEnv *env, jint flag){
+void exitApplication(JNIEnv *env, jint flag){
     jclass temp_clazz = NULL;
     jmethodID mid_static_method;
     temp_clazz = (*env)->FindClass(env, "java/lang/System");

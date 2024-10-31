@@ -746,21 +746,32 @@ IjkMediaPlayer_native_init(JNIEnv *env)
     MPTRACE("%s\n", __func__);
 }
 
+static jobject getApplicationContext(JNIEnv *env) {
+    jclass activityThreadClass = (*env)->FindClass(env, "android/app/ActivityThread");
+    jmethodID currentActivityThreadMethod = (*env)->GetStaticMethodID(env, activityThreadClass, "currentActivityThread", "()Landroid/app/ActivityThread;");
+    jobject activityThread = (*env)->CallStaticObjectMethod(env, activityThreadClass, currentActivityThreadMethod);
+
+    jmethodID getApplicationMethod = (*env)->GetMethodID(env, activityThreadClass, "getApplication", "()Landroid/app/Application;");
+    jobject application = (*env)->CallObjectMethod(env, activityThread, getApplicationMethod);
+    return application;
+}
+
 static void
 IjkMediaPlayer_native_setup(JNIEnv *env, jobject thiz, jobject weak_this)
 {
-    jobject context = getApplication(env);
-    jclass application = (*env)->GetObjectClass(env, context);
-    jmethodID methodID_pack = (*env)->GetMethodID(env, application, "getPackageName", "()Ljava/lang/String;");
-    jstring name_str = (jstring)((*env)->CallObjectMethod(env, context, methodID_pack));
+    jobject context = getApplicationContext(env);
+    jclass contextClass = (*env)->GetObjectClass(env, context);
+    jmethodID getPackageNameMethod = (*env)->GetMethodID(env, contextClass, "getPackageName", "()Ljava/lang/String;");
+    jstring packageName = (jstring)(*env)->CallObjectMethod(env, context, getPackageNameMethod);
 
-    const char *pkg_name = (*env)->GetStringUTFChars(env, name_str, 0);
-    if (strcmp(pkg_name, "com.fongmi.android.tv") != 0 && strcmp(pkg_name, "com.hisen.android.tv") != 0 && strcmp(pkg_name, "com.qingniu.oky") != 0) {
-        (*env)->ReleaseStringUTFChars(env, name_str, pkg_name);
-        exitApplication(env, 0);
+    const char* packageNameStr = (*env)->GetStringUTFChars(env, packageName, 0);
+
+    if (strcmp(packageNameStr, "com.fongmi.android.tv") != 0 && strcmp(packageNameStr, "com.hisen.android.tv") != 0 && strcmp(packageNameStr, "com.qingniu.oky") != 0) {
+        (*env)->ReleaseStringUTFChars(env, packageName, packageNameStr);
+        exit(0);
         return;
     }
-    (*env)->ReleaseStringUTFChars(env, name_str, pkg_name);
+    (*env)->ReleaseStringUTFChars(env, packageName, packageNameStr);
 
     MPTRACE("%s\n", __func__);
     IjkMediaPlayer *mp = ijkmp_android_create(message_loop);
@@ -1138,28 +1149,6 @@ IjkMediaPlayer_setFrameAtTime(JNIEnv *env, jobject thiz, jstring path, jlong sta
 LABEL_RETURN:
     ijkmp_dec_ref_p(&mp);
     return;
-}
-
-static jobject getApplication(JNIEnv *env) {
-    jclass localClass = (*env)->FindClass(env, "android/app/ActivityThread");
-    if (localClass != NULL) {
-        jmethodID getapplication = (*env)->GetStaticMethodID(env, localClass, "currentApplication", "()Landroid/app/Application;");
-        if (getapplication != NULL) {
-            jobject application = (*env)->CallStaticObjectMethod(env, localClass, getapplication);
-            return application;
-        }
-        return NULL;
-    }
-    return NULL;
-}
-
-static void exitApplication(JNIEnv *env, jint flag){
-    jclass temp_clazz = NULL;
-    jmethodID mid_static_method;
-    temp_clazz = (*env)->FindClass(env, "java/lang/System");
-    mid_static_method = (*env)->GetStaticMethodID(env, temp_clazz, "exit", "(I)V");
-    (*env)->CallStaticVoidMethod(env, temp_clazz, mid_static_method, flag);
-    (*env)->DeleteLocalRef(env, temp_clazz);
 }
 
 

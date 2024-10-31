@@ -42,13 +42,21 @@ jobs:
           ./init-android.sh ${{ inputs.fftag }}
           ./init-android-openssl.sh
           
+          chmod +x ./init-libav3ad.sh
+          ./init-libav3ad.sh
+          
           cd android/contrib
           
           
           ./compile-openssl.sh clean
           ./compile-openssl.sh armv7a
 
+          chmod +x ./compile-libav3ad.sh
+          chmod +x ./tools/do-compile-libav3ad.sh
           
+          
+          ./compile-libav3ad.sh clean
+          ./compile-libav3ad.sh armv7a
           
           ./compile-ffmpeg.sh clean
           ./compile-ffmpeg.sh armv7a

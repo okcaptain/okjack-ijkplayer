@@ -16,28 +16,25 @@
 # limitations under the License.
 #
 
-# IJK_FFMPEG_UPSTREAM=git://git.videolan.org/ffmpeg.git
-IJK_FFMPEG_UPSTREAM=https://github.com/okcaptain/okjack-ffmpeg.git
-IJK_FFMPEG_FORK=https://github.com/okcaptain/okjack-ffmpeg.git
-IJK_FFMPEG_COMMIT=$1
-IJK_FFMPEG_LOCAL_REPO=extra/ffmpeg
+IJK_LIBUAVS3D_UPSTREAM=https://github.com/okcaptain/avs3a.git
+IJK_LIBUAVS3D_FORK=https://github.com/okcaptain/avs3a.git
+IJK_LIBUAVS3D_COMMIT=master
+IJK_LIBUAVS3D_LOCAL_REPO=extra/libav3ad
 
 set -e
 TOOLS=tools
 
 git --version
 
-echo "== pull ffmpeg base =="
-sh $TOOLS/pull-repo-base.sh $IJK_FFMPEG_UPSTREAM $IJK_FFMPEG_LOCAL_REPO
+echo "== pull libav3ad base =="
+sh $TOOLS/pull-repo-base.sh $IJK_LIBUAVS3D_UPSTREAM $IJK_LIBUAVS3D_LOCAL_REPO
 
 function pull_fork()
 {
-    echo "== pull ffmpeg fork $1 =="
-    sh $TOOLS/pull-repo-ref.sh $IJK_FFMPEG_FORK android/contrib/ffmpeg-$1 ${IJK_FFMPEG_LOCAL_REPO}
-    cd android/contrib/ffmpeg-$1
-    cp ../../model.bin .
-    ls -al .
-    git checkout ${IJK_FFMPEG_COMMIT} -B ijkplayer
+    echo "== pull libav3ad fork $1 =="
+    sh $TOOLS/pull-repo-ref.sh $IJK_LIBUAVS3D_FORK android/contrib/libav3ad-$1 ${IJK_LIBUAVS3D_LOCAL_REPO}
+    cd android/contrib/libav3ad-$1
+    git checkout ${IJK_LIBUAVS3D_COMMIT} -B ijkplayer
     cd -
 }
 
@@ -45,7 +42,3 @@ pull_fork "armv7a"
 #pull_fork "arm64"
 #pull_fork "x86"
 #pull_fork "x86_64"
-
-./init-config.sh
-./init-android-libyuv.sh
-./init-android-soundtouch.sh

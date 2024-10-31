@@ -55,7 +55,7 @@ FF_DEP_LIBSOXR_LIB=
 FF_CFG_FLAGS=
 
 FF_EXTRA_CFLAGS=
-FF_EXTRA_LDFLAGS=-ldl
+FF_EXTRA_LDFLAGS=
 FF_DEP_LIBS=
 
 FF_MODULE_DIRS="compat libavcodec libavfilter libavformat libavutil libswresample libswscale"
@@ -77,7 +77,7 @@ FF_GCC_64_VER=$IJK_GCC_64_VER
 #----- armv7a begin -----
 if [ "$FF_ARCH" = "armv7a" ]; then
     FF_BUILD_NAME=ffmpeg-armv7a
-    FF_BUILD_NAME_LIBARCDAV3A=libarcdav3a-armv7a
+    FF_BUILD_NAME_LIBAV3AD=libav3ad-armv7a
     FF_BUILD_NAME_LIBUAVS3D=libuavs3d-armv7a
     FF_BUILD_NAME_OPENSSL=openssl-armv7a
     FF_BUILD_NAME_LIBSOXR=libsoxr-armv7a
@@ -97,7 +97,7 @@ if [ "$FF_ARCH" = "armv7a" ]; then
 
 elif [ "$FF_ARCH" = "armv5" ]; then
     FF_BUILD_NAME=ffmpeg-armv5
-    FF_BUILD_NAME_LIBARCDAV3A=libarcdav3a-armv5
+    FF_BUILD_NAME_LIBAV3AD=libav3ad-armv5
     FF_BUILD_NAME_LIBUAVS3D=libuavs3d-armv5
     FF_BUILD_NAME_OPENSSL=openssl-armv5
     FF_BUILD_NAME_LIBSOXR=libsoxr-armv5
@@ -115,7 +115,7 @@ elif [ "$FF_ARCH" = "armv5" ]; then
 
 elif [ "$FF_ARCH" = "x86" ]; then
     FF_BUILD_NAME=ffmpeg-x86
-    FF_BUILD_NAME_LIBARCDAV3A=libarcdav3a-x86
+    FF_BUILD_NAME_LIBAV3AD=libav3ad-x86
     FF_BUILD_NAME_LIBUAVS3D=libuavs3d-x86
     FF_BUILD_NAME_OPENSSL=openssl-x86
     FF_BUILD_NAME_LIBSOXR=libsoxr-x86
@@ -135,7 +135,7 @@ elif [ "$FF_ARCH" = "x86_64" ]; then
     FF_ANDROID_PLATFORM=android-21
 
     FF_BUILD_NAME=ffmpeg-x86_64
-    FF_BUILD_NAME_LIBARCDAV3A=libarcdav3a-x86_64
+    FF_BUILD_NAME_LIBAV3AD=libav3ad-x86_64
     FF_BUILD_NAME_LIBUAVS3D=libuavs3d-x86_64
     FF_BUILD_NAME_OPENSSL=openssl-x86_64
     FF_BUILD_NAME_LIBSOXR=libsoxr-x86_64
@@ -155,7 +155,7 @@ elif [ "$FF_ARCH" = "arm64" ]; then
     FF_ANDROID_PLATFORM=android-21
 
     FF_BUILD_NAME=ffmpeg-arm64
-    FF_BUILD_NAME_LIBARCDAV3A=libarcdav3a-arm64
+    FF_BUILD_NAME_LIBAV3AD=libav3ad-arm64
     FF_BUILD_NAME_LIBUAVS3D=libuavs3d-arm64
     FF_BUILD_NAME_OPENSSL=openssl-arm64
     FF_BUILD_NAME_LIBSOXR=libsoxr-arm64
@@ -196,6 +196,8 @@ FF_DEP_LIBSOXR_INC=$FF_BUILD_ROOT/build/$FF_BUILD_NAME_LIBSOXR/output/include
 FF_DEP_LIBSOXR_LIB=$FF_BUILD_ROOT/build/$FF_BUILD_NAME_LIBSOXR/output/lib
 FF_DEP_LIBUAVS3D_INC=$FF_BUILD_ROOT/build/$FF_BUILD_NAME_LIBUAVS3D/output/include
 FF_DEP_LIBUAVS3D_LIB=$FF_BUILD_ROOT/build/$FF_BUILD_NAME_LIBUAVS3D/output/lib
+FF_DEP_LIBAV3AD_INC=$FF_BUILD_ROOT/build/$FF_BUILD_NAME_LIBAV3AD/output/include
+FF_DEP_LIBAV3AD_LIB=$FF_BUILD_ROOT/build/$FF_BUILD_NAME_LIBAV3AD/output/lib
 
 case "$UNAME_S" in
     CYGWIN_NT-*)
@@ -279,9 +281,15 @@ if [ -f "${FF_DEP_LIBUAVS3D_LIB}/libuavs3d.a" ]; then
     FF_DEP_LIBS="$FF_DEP_LIBS -L${FF_DEP_LIBUAVS3D_LIB} -luavs3d"
 fi
 
-FF_CFG_FLAGS="$FF_CFG_FLAGS --enable-libarcdav3a"
-export LD_LIBRARY_PATH=$FF_BUILD_ROOT/$FF_BUILD_NAME_LIBARCDAV3A:$LD_LIBRARY_PATH
-echo $LD_LIBRARY_PATH
+if [ -f "${FF_DEP_LIBAV3AD_LIB}/libav3ad.so" ]; then
+    echo "libav3ad detected"
+
+    FF_CFG_FLAGS="$FF_CFG_FLAGS --enable-libav3ad"
+
+    FF_CFLAGS="$FF_CFLAGS -I${FF_DEP_LIBAV3AD_INC}"
+    FF_DEP_LIBS="$FF_DEP_LIBS -L${FF_DEP_LIBAV3AD_LIB} -lav3ad"
+fi
+
 
 
 

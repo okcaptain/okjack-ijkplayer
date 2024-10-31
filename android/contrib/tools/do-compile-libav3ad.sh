@@ -146,6 +146,7 @@ echo "--------------------"
 export PATH=$FF_TOOLCHAIN_PATH/bin:$PATH
 
 export CC="${FF_CROSS_PREFIX}-gcc"
+export CXX="${FF_CROSS_PREFIX}-g++"
 export LD=${FF_CROSS_PREFIX}-ld
 export AR=${FF_CROSS_PREFIX}-ar
 export STRIP=${FF_CROSS_PREFIX}-strip

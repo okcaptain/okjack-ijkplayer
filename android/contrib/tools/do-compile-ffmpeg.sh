@@ -169,7 +169,7 @@ elif [ "$FF_ARCH" = "arm64" ]; then
     FF_EXTRA_CFLAGS="$FF_EXTRA_CFLAGS"
     FF_EXTRA_LDFLAGS="$FF_EXTRA_LDFLAGS"
 
-    FF_ASSEMBLER_SUB_DIRS="aarch64 neon"
+    FF_ASSEMBLER_SUB_DIRS="aarch64"
 
 else
     echo "unknown architecture $FF_ARCH";
@@ -281,7 +281,14 @@ if [ -f "${FF_DEP_LIBUAVS3D_LIB}/libuavs3d.a" ]; then
     FF_DEP_LIBS="$FF_DEP_LIBS -L${FF_DEP_LIBUAVS3D_LIB} -luavs3d"
 fi
 
+if [ -f "${FF_DEP_LIBAV3AD_LIB}/libav3ad.so" ]; then
+    echo "libav3ad detected"
 
+    FF_CFG_FLAGS="$FF_CFG_FLAGS --enable-libav3ad"
+
+    FF_CFLAGS="$FF_CFLAGS -I${FF_DEP_LIBAV3AD_INC}"
+    FF_DEP_LIBS="$FF_DEP_LIBS -L${FF_DEP_LIBAV3AD_LIB} -lav3ad"
+fi
 
 
 

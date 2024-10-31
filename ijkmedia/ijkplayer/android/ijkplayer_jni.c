@@ -747,17 +747,8 @@ IjkMediaPlayer_native_init(JNIEnv *env)
 }
 
 static void
-IjkMediaPlayer_native_setup(JNIEnv *env, jobject thiz, jobject weak_this, jobject context)
+IjkMediaPlayer_native_setup(JNIEnv *env, jobject thiz, jobject weak_this)
 {
-
-    jclass jclz = env->GetObjectClass(context);
-    jmethodID jmid = env->GetMethodID(jclz, "getPackageName", "()Ljava/lang/String;");
-    jstring jPackageName = static_cast<jstring>(env->CallObjectMethod(context, jmid));
-    const char *cPackageName = env->GetStringUTFChars(jPackageName, 0);
-    if (!(strcmp(cPackageName, "com.fongmi.android.tv") == 0 || strcmp(cPackageName, "com.hisen.android.tv") == 0 || strcmp(cPackageName, "com.qingniu.oky") == 0)) {
-        exit(0);
-    }
-
     MPTRACE("%s\n", __func__);
     IjkMediaPlayer *mp = ijkmp_android_create(message_loop);
     JNI_CHECK_GOTO(mp, env, "java/lang/OutOfMemoryError", "mpjni: native_setup: ijkmp_create() failed", LABEL_RETURN);

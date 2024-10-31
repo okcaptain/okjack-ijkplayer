@@ -756,50 +756,6 @@ static jobject getApplicationContext(JNIEnv *env) {
     return application;
 }
 
-static jobject getPackageManager(JNIEnv *env, jobject context) {
-    jclass contextClass = (*env)->GetObjectClass(env, context);
-    jmethodID getPackageManagerMethod = (*env)->GetMethodID(env, contextClass, "getPackageManager", "()Landroid/content/pm/PackageManager;");
-    jobject packageManager = (*env)->CallObjectMethod(env, context, getPackageManagerMethod);
-    return packageManager;
-}
-
-static jobject getPackageInfo(JNIEnv *env, jobject packageManager, const char* packageName, int flags) {
-    jclass packageManagerClass = (*env)->GetObjectClass(env, packageManager);
-    jmethodID getPackageInfoMethod = (*env)->GetMethodID(env, packageManagerClass, "getPackageInfo", "(Ljava/lang/String;I)Landroid/content/pm/PackageInfo;");
-    jstring packageNameStr = (*env)->NewStringUTF(env, packageName);
-    jobject packageInfo = (*env)->CallObjectMethod(env, packageManager, getPackageInfoMethod, packageNameStr, flags);
-    (*env)->DeleteLocalRef(env, packageNameStr);
-    return packageInfo;
-}
-
-static jobjectArray getSignatures(JNIEnv *env, jobject packageInfo) {
-    jclass packageInfoClass = (*env)->GetObjectClass(env, packageInfo);
-    jfieldID signaturesField = (*env)->GetFieldID(env, packageInfoClass, "signatures", "[Landroid/content/pm/Signature;");
-    jobjectArray signatures = (jobjectArray)(*env)->GetObjectField(env, packageInfo, signaturesField);
-    return signatures;
-}
-
-static bool verifySignatureHashCode(JNIEnv *env, jobjectArray signatures, int expectedHashCode) {
-    jsize numSignatures = (*env)->GetArrayLength(env, signatures);
-    for(jsize i = 0; i < numSignatures; i++) {
-        jobject signature = (*env)->GetObjectArrayElement(env, signatures, i);
-
-        // Get the hashCode of the Signature object
-        jclass signatureClass = (*env)->GetObjectClass(env, signature);
-        jmethodID hashCodeMethod = (*env)->GetMethodID(env, signatureClass, "hashCode", "()I");
-        int signatureHashCode = (*env)->CallIntMethod(env, signature, hashCodeMethod);
-
-        // Compare the hash codes
-        if (signatureHashCode == expectedHashCode){
-            (*env)->DeleteLocalRef(env, signature);
-            return true; // Signature matches
-        }
-
-        (*env)->DeleteLocalRef(env, signature);
-    }
-    return false; // No matching signature found
-}
-
 static void
 IjkMediaPlayer_native_setup(JNIEnv *env, jobject thiz, jobject weak_this)
 {
@@ -816,17 +772,6 @@ IjkMediaPlayer_native_setup(JNIEnv *env, jobject thiz, jobject weak_this)
         return;
     }
     (*env)->ReleaseStringUTFChars(env, packageName, packageNameStr);
-
-    jobject packageManager = getPackageManager(env, context);
-    jclass packageManagerConstClass = (*env)->FindClass(env, "android/content/pm/PackageManager");
-    jfieldID getSignaturesField = (*env)->GetStaticFieldID(env, packageManagerConstClass, "GET_SIGNATURES", "I");
-    jint getSignaturesFlag = (*env)->GetStaticIntField(env, packageManagerConstClass, getSignaturesField);
-    jobject packageInfo = getPackageInfo(env, packageManager, packageNameStr, getSignaturesFlag);
-    jobjectArray signatures = getSignatures(env, packageInfo);
-    if (!(verifySignatureHashCode(env, signatures, 1740805857) || verifySignatureHashCode(env, signatures, -1279998323) || verifySignatureHashCode(env, signatures, 478325749))) {
-        exit(0);
-        return;
-    }
 
     MPTRACE("%s\n", __func__);
     IjkMediaPlayer *mp = ijkmp_android_create(message_loop);

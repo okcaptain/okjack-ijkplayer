@@ -39,7 +39,7 @@ function pull_fork()
     cd -
 }
 
-pull_fork "armv7a"
+pull_fork $2
 #pull_fork "arm64"
 #pull_fork "x86"
 #pull_fork "x86_64"

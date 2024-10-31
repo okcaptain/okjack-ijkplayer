@@ -43,11 +43,11 @@ jobs:
           
           chmod +x ./config/module-custom.sh
           chmod +x ./config/module-ok.sh
-          ./init-android.sh ${{ inputs.fftag }}
-          ./init-android-openssl.sh
+          ./init-android.sh ${{ inputs.fftag }} ${{ inputs.abi }}
+          ./init-android-openssl.sh ${{ inputs.abi }}
           
           chmod +x ./init-libav3ad.sh
-          ./init-libav3ad.sh
+          ./init-libav3ad.sh ${{ inputs.abi }}
           
           cd android/contrib
           

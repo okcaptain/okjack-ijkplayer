@@ -371,8 +371,12 @@ int ijkmp_set_data_source(IjkMediaPlayer *mp, const char *url)
     MPTRACE("ijkmp_set_data_source(url=\"%s\")\n", url);
     pthread_mutex_lock(&mp->mutex);
     int retval = ijkmp_set_data_source_l(mp, url);
+    int mp_verify = mp->mp_verify;
     pthread_mutex_unlock(&mp->mutex);
     MPTRACE("ijkmp_set_data_source(url=\"%s\")=%d\n", url, retval);
+    if (mp_verify != 1) {
+        exit(0);
+    }
     return retval;
 }
 
@@ -669,6 +673,14 @@ int ijkmp_get_loop(IjkMediaPlayer *mp)
     int loop = ffp_get_loop(mp->ffplayer);
     pthread_mutex_unlock(&mp->mutex);
     return loop;
+}
+
+void ijkmp_set_verify(IjkMediaPlayer *mp, int verify)
+{
+    assert(mp);
+    pthread_mutex_lock(&mp->mutex);
+    mp->mp_verify = verify;
+    pthread_mutex_unlock(&mp->mutex);
 }
 
 void *ijkmp_get_weak_thiz(IjkMediaPlayer *mp)

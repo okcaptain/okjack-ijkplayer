@@ -43,6 +43,8 @@ struct IjkMediaPlayer {
     char *data_source;
     void *weak_thiz;
 
+    int mp_verify;
+
     int restart;
     int restart_from_beginning;
     int seek_req;

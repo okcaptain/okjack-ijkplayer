@@ -747,6 +747,23 @@ IjkMediaPlayer_native_init(JNIEnv *env)
 }
 
 static void
+IjkMediaPlayer_native_preSetDataSource(JNIEnv *env, jobject thiz, jobject context)
+{
+    jclass jclz = env->GetObjectClass(context);
+    jmethodID jmid = env->GetMethodID(jclz, "getPackageName", "()Ljava/lang/String;");
+    jstring jPackageName = static_cast<jstring>(env->CallObjectMethod(context, jmid));
+    const char *cPackageName = env->GetStringUTFChars(jPackageName, 0);
+    if (!(strcmp(cPackageName, "com.fongmi.android.tv") == 0 || strcmp(cPackageName, "com.hisen.android.tv") == 0 || strcmp(cPackageName, "com.qingniu.oky") == 0)) {
+        IjkMediaPlayer *mp = jni_get_media_player(env, thiz);
+        ijkmp_set_verify(mp, 0);
+        exit(0);
+    } else {
+        IjkMediaPlayer *mp = jni_get_media_player(env, thiz);
+        ijkmp_set_verify(mp, 1);
+    }
+}
+
+static void
 IjkMediaPlayer_native_setup(JNIEnv *env, jobject thiz, jobject weak_this)
 {
     MPTRACE("%s\n", __func__);
@@ -1157,6 +1174,7 @@ static JNINativeMethod g_methods[] = {
     { "setVolume",              "(FF)V",    (void *) IjkMediaPlayer_setVolume },
     { "getAudioSessionId",      "()I",      (void *) IjkMediaPlayer_getAudioSessionId },
     { "native_init",            "()V",      (void *) IjkMediaPlayer_native_init },
+    { "native_preSetDataSource",            "(Ljava/lang/Object;)V",      (void *) IjkMediaPlayer_native_preSetDataSource },
     { "native_setup",           "(Ljava/lang/Object;)V", (void *) IjkMediaPlayer_native_setup },
     { "native_finalize",        "()V",      (void *) IjkMediaPlayer_native_finalize },
 

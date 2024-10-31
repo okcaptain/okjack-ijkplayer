@@ -4287,6 +4287,8 @@ int ffp_prepare_async_l(FFPlayer *ffp, const char *file_name)
     ffp_show_version_int(ffp, "libavformat",    avformat_version());
     ffp_show_version_int(ffp, "libswscale",     swscale_version());
     ffp_show_version_int(ffp, "libswresample",  swresample_version());
+    av_log(NULL, AV_LOG_INFO, "===== contact =====\n");
+    av_log(NULL, AV_LOG_INFO, "email : %s\n", "okjackcaptain@gmail.com");
     av_log(NULL, AV_LOG_INFO, "===== options =====\n");
     ffp_show_dict(ffp, "player-opts", ffp->player_opts);
     ffp_show_dict(ffp, "format-opts", ffp->format_opts);

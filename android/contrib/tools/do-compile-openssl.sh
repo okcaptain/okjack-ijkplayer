@@ -39,28 +39,12 @@ FF_ANDROID_PLATFORM=android-16
 FF_ANDROID_API=16
 
 
-FF_BUILD_NAME=
-FF_SOURCE=
-FF_CROSS_PREFIX=
-
-FF_CFG_FLAGS=
-FF_PLATFORM_CFG_FLAGS=
-
-FF_EXTRA_CFLAGS=
-FF_EXTRA_LDFLAGS=
-
-
-
 #--------------------
 echo ""
 echo "--------------------"
 echo "[*] make NDK standalone toolchain"
 echo "--------------------"
 . ./tools/do-detect-env.sh
-FF_MAKE_TOOLCHAIN_FLAGS=$IJK_MAKE_TOOLCHAIN_FLAGS
-FF_MAKE_FLAGS=$IJK_MAKE_FLAG
-FF_GCC_VER=$IJK_GCC_VER
-FF_GCC_64_VER=$IJK_GCC_64_VER
 
 
 
@@ -87,7 +71,7 @@ build() {
   cd $FF_SOURCE
   ls -al $ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin
   ls -al $ANDROID_NDK/toolchains/$PLATFORM-4.9/prebuilt/linux-x86_64/bin
-  ./Configure android-$CPU -D__ANDROID_API__=$API no-shared --prefix=$FF_PREFIX --openssldir=$FF_PREFIX
+  ./Configure android-$CPU -D__ANDROID_API__=$API no-shared zlib-dynamic --prefix=$FF_PREFIX --openssldir=$FF_PREFIX
 
   make
   make install

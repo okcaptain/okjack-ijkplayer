@@ -158,12 +158,6 @@ CLANG_PREFIX=${PLATFORM}${API}-clang
 
 echo $FF_CROSS_PREFIX
 
-export CC="${FF_CROSS_PREFIX}clang"
-export CXX="${FF_CROSS_PREFIX}clang++"
-export LD=${FF_CROSS_PREFIX}ld
-export AR=${FF_CROSS_PREFIX}ar
-export STRIP=${FF_CROSS_PREFIX}strip
-
 FF_CFLAGS="-O3 -Wall -pipe \
     -std=c99 \
     -ffast-math \

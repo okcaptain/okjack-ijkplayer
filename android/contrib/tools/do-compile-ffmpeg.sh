@@ -164,6 +164,10 @@ echo $FF_CROSS_PREFIX
 
 export CC="${CLANG_PREFIX}"
 export CXX="${CLANG_PREFIX}++"
+export LD=${PLATFORM}-ld
+export AS=${PLATFORM}-as
+export AR=${PLATFORM}-ar
+export RANLIB=${PLATFORM}-ranlib
 
 FF_CFLAGS="-O3 -Wall -pipe \
     -std=c99 \

@@ -268,6 +268,7 @@ if [ -f "./config.h" ]; then
     echo 'reuse configure'
 else
     echo $CC
+    ls -al $CC
     which $CC
     echo "./configure $FF_CFG_FLAGS --cc=${CLANG_PREFIX} --cxx=${CLANG_PREFIX}++ --extra-cflags=$FF_CFLAGS $FF_EXTRA_CFLAGS --extra-ldflags=$FF_DEP_LIBS $FF_EXTRA_LDFLAGS"
     ls -al ./

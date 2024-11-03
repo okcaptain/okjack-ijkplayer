@@ -36,6 +36,7 @@ fi
 
 FF_BUILD_ROOT=`pwd`
 FF_ANDROID_PLATFORM=android-16
+FF_ANDROID_API=16
 
 
 FF_BUILD_NAME=
@@ -70,7 +71,7 @@ if [ "$FF_ARCH" = "armv7a" ]; then
     FF_CROSS_PREFIX=arm-linux-androideabi
 	FF_TOOLCHAIN_NAME=${FF_CROSS_PREFIX}-${FF_GCC_VER}
 
-    FF_PLATFORM_CFG_FLAGS="android-arm"
+    FF_PLATFORM_CFG_FLAGS="android-arm -D__ANDROID_API__=$FF_ANDROID_API"
 
 elif [ "$FF_ARCH" = "armv5" ]; then
     FF_BUILD_NAME=openssl-armv5
@@ -105,6 +106,7 @@ elif [ "$FF_ARCH" = "x86_64" ]; then
 
 elif [ "$FF_ARCH" = "arm64" ]; then
     FF_ANDROID_PLATFORM=android-21
+    FF_ANDROID_API=21
 
     FF_BUILD_NAME=openssl-arm64
     FF_SOURCE=$FF_BUILD_ROOT/$FF_BUILD_NAME
@@ -112,7 +114,7 @@ elif [ "$FF_ARCH" = "arm64" ]; then
     FF_CROSS_PREFIX=aarch64-linux-android
     FF_TOOLCHAIN_NAME=${FF_CROSS_PREFIX}-${FF_GCC_64_VER}
 
-    FF_PLATFORM_CFG_FLAGS="android-arm64"
+    FF_PLATFORM_CFG_FLAGS="android-arm64 -D__ANDROID_API__=$FF_ANDROID_API"
 
 else
     echo "unknown architecture $FF_ARCH";

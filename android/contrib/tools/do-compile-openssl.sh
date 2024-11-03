@@ -63,7 +63,6 @@ FF_GCC_VER=$IJK_GCC_VER
 FF_GCC_64_VER=$IJK_GCC_64_VER
 
 
-mkdir -p $FF_PREFIX
 
 build() {
   if [ "$FF_ARCH" = "armv7a" ]; then
@@ -82,9 +81,9 @@ build() {
   fi
 
   FF_PREFIX=$FF_BUILD_ROOT/build/$FF_BUILD_NAME/output
+  mkdir -p $FF_PREFIX
   make clean
-  rm -rf $(pwd)/android/$CPU
-  PATH=$ANDROID_NDKE/toolchains/llvm/prebuilt/linux-x86_64/bin:$ANDROID_NDK/toolchains/$PLATFORM-4.9/prebuilt/linux-x86_64/bin:$PATH
+  export PATH=$ANDROID_NDKE/toolchains/llvm/prebuilt/linux-x86_64/bin:$ANDROID_NDK/toolchains/$PLATFORM-4.9/prebuilt/linux-x86_64/bin:$PATH
   ./Configure android-$CPU -D__ANDROID_API__=$API no-shared --prefix=$FF_PREFIX --openssldir=$FF_PREFIX
 
   make

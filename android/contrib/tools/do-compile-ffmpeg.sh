@@ -89,29 +89,29 @@ if [ "$FF_ARCH" = "armv7a" ]; then
 
     FF_ASSEMBLER_SUB_DIRS="arm"
 
-  elif [ "$FF_ARCH" = "arm64" ]; then
-    CPU=arm64
-    API=21
-    PLATFORM=aarch64-linux-android
+elif [ "$FF_ARCH" = "arm64" ]; then
+  CPU=arm64
+  API=21
+  PLATFORM=aarch64-linux-android
 
-    FF_BUILD_NAME=ffmpeg-arm64
-    FF_BUILD_NAME_LIBAV3AD=libav3ad-arm64
-    FF_BUILD_NAME_LIBUAVS3D=libuavs3d-arm64
-    FF_BUILD_NAME_OPENSSL=openssl-arm64
-    FF_BUILD_NAME_LIBSOXR=libsoxr-arm64
-    FF_SOURCE=$FF_BUILD_ROOT/$FF_BUILD_NAME
+  FF_BUILD_NAME=ffmpeg-arm64
+  FF_BUILD_NAME_LIBAV3AD=libav3ad-arm64
+  FF_BUILD_NAME_LIBUAVS3D=libuavs3d-arm64
+  FF_BUILD_NAME_OPENSSL=openssl-arm64
+  FF_BUILD_NAME_LIBSOXR=libsoxr-arm64
+  FF_SOURCE=$FF_BUILD_ROOT/$FF_BUILD_NAME
 
-    FF_CFG_FLAGS="$FF_CFG_FLAGS --arch=aarch64 --enable-yasm"
+  FF_CFG_FLAGS="$FF_CFG_FLAGS --arch=aarch64 --enable-yasm"
 
-    FF_EXTRA_CFLAGS="$FF_EXTRA_CFLAGS"
-    FF_EXTRA_LDFLAGS="$FF_EXTRA_LDFLAGS"
+  FF_EXTRA_CFLAGS="$FF_EXTRA_CFLAGS"
+  FF_EXTRA_LDFLAGS="$FF_EXTRA_LDFLAGS"
 
-    FF_ASSEMBLER_SUB_DIRS="aarch64 neon"
+  FF_ASSEMBLER_SUB_DIRS="aarch64 neon"
 
-  else
-      echo "unknown architecture $FF_ARCH";
-      exit 1
-  fi
+else
+    echo "unknown architecture $FF_ARCH";
+    exit 1
+fi
 
 if [ ! -d $FF_SOURCE ]; then
     echo ""

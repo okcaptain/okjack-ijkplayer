@@ -272,7 +272,7 @@ else
     chmod +x ./configure
     ./configure $FF_CFG_FLAGS \
             --cc=$CLANG_PREFIX --cxx=$CLANG_PREFIX++  \
-            --sysroot=$ANDROID_NDK/sysroot \
+            --sysroot=$FF_SYSROOT \
             --extra-cflags="$FF_CFLAGS $FF_EXTRA_CFLAGS" \
             --extra-ldflags="$FF_DEP_LIBS $FF_EXTRA_LDFLAGS" || cat ffbuild/config.log
     make clean

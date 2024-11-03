@@ -212,7 +212,7 @@ echo "--------------------"
 FF_TOOLCHAIN_PATH_BIN=$FF_TOOLCHAIN_PATH/bin
 export PATH=$FF_TOOLCHAIN_PATH_BIN:$PATH
 #export CC="ccache ${FF_CROSS_PREFIX}-gcc"
-export CC="${FF_CROSS_PREFIX}-gcc"
+export CC="${FF_CROSS_PREFIX}-clang"
 export CXX="${FF_CROSS_PREFIX}-g++"
 export LD=${FF_CROSS_PREFIX}-ld
 export AR=${FF_CROSS_PREFIX}-ar

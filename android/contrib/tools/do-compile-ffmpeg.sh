@@ -72,6 +72,7 @@ if [ "$FF_ARCH" = "armv7a" ]; then
     CPU=arm
     API=16
     PLATFORM=arm-linux-androideabi
+    PLATFORM_T=armv7a-linux-androideabi
 
     FF_BUILD_NAME=ffmpeg-armv7a
     FF_BUILD_NAME_LIBAV3AD=libav3ad-armv7a
@@ -93,6 +94,7 @@ elif [ "$FF_ARCH" = "arm64" ]; then
   CPU=arm64
   API=21
   PLATFORM=aarch64-linux-android
+  PLATFORM_T=aarch64-linux-android
 
   FF_BUILD_NAME=ffmpeg-arm64
   FF_BUILD_NAME_LIBAV3AD=libav3ad-arm64
@@ -155,7 +157,7 @@ export PATH=$ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin:$ANDROID_NDK/
 echo $PATH
 
 FF_CROSS_PREFIX=$ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin/${PLATFORM}
-CLANG_PREFIX=$ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin/${PLATFORM}${API}-clang
+CLANG_PREFIX=$ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin/${PLATFORM_T}${API}-clang
 FF_SYSROOT=$ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin/sysroot
 
 echo $FF_CROSS_PREFIX

@@ -155,8 +155,12 @@ export PATH=$ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin:$ANDROID_NDK/
 echo $PATH
 FF_CROSS_PREFIX=${PLATFORM}-
 CLANG_PREFIX=${PLATFORM}${API}-clang
+FF_SYSROOT=$ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin/sysroot
 
 echo $FF_CROSS_PREFIX
+
+export CC="${FF_CROSS_PREFIX}${API}clang"
+export CXX="${FF_CROSS_PREFIX}${API}clang++"
 
 FF_CFLAGS="-O3 -Wall -pipe \
     -std=c99 \
@@ -269,6 +273,7 @@ else
     chmod +x ./configure
     ./configure $FF_CFG_FLAGS \
             --cc=$CLANG_PREFIX --cxx=$CLANG_PREFIX++  \
+            --sysroot=$ANDROID_NDK/sysroot \
             --extra-cflags="$FF_CFLAGS $FF_EXTRA_CFLAGS" \
             --extra-ldflags="$FF_DEP_LIBS $FF_EXTRA_LDFLAGS" || cat ffbuild/config.log
     make clean

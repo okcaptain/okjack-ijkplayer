@@ -114,6 +114,7 @@ else
 fi
 
 echo $FF_SOURCE
+ls -al $FF_SOURCE
 
 if [ ! -d $FF_SOURCE ]; then
     echo ""

@@ -1,0 +1,71 @@
+name: build-test
+
+on:
+  workflow_dispatch:
+    inputs:
+      fftag:
+        description: 'tag of ff'
+        required: true
+        default: '---'
+      abi:
+        description: 'android abi'
+        required: true
+        default: 'armv7a'
+
+jobs:
+  linux:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: nttld/setup-ndk@v1
+        id: setup-ndk
+        with:
+          ndk-version: r14b
+          add-to-path: false
+          local-cache: true
+
+      - name: test
+        run: |
+          pwd
+          sudo apt-get install libncurses5
+
+      - name: Build
+        env:
+          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
+        run: |
+          ANDROID_NDK_HOME=${{ env.ANDROID_NDK_HOME }}
+          export ANDROID_SDK=$ANDROID_HOME
+          export ANDROID_NDK=$ANDROID_NDK_HOME
+          export ANDROID_NDK_ROOT=$ANDROID_NDK_HOME
+          export PATH=$PATH:$ANDROID_SDK/tools
+          export PATH=$PATH:$ANDROID_SDK/platform-tools
+          export PATH=$PATH:$ANDROID_NDK
+          
+          chmod +x ./config/module-custom.sh
+          chmod +x ./config/module-ok.sh
+          ./init-android.sh ${{ inputs.fftag }} ${{ inputs.abi }}
+          ./init-android-openssl.sh ${{ inputs.abi }}
+          
+          
+          cd android/contrib
+          
+          
+          ./compile-openssl.sh clean
+          ./compile-openssl.sh ${{ inputs.abi }}
+
+          
+          ./compile-ffmpeg.sh clean
+          ./compile-ffmpeg.sh ${{ inputs.abi }}
+          
+          cd ..  
+          ./compile-ijk.sh ${{ inputs.abi }}
+
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ijk
+          path: ./android/ijkplayer/ijkplayer-${{ inputs.abi }}
+
+
+
+

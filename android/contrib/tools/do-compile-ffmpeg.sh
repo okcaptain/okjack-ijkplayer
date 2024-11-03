@@ -153,14 +153,14 @@ echo "[*] check ffmpeg env"
 echo "--------------------"
 export PATH=$ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin:$ANDROID_NDK/toolchains/$PLATFORM-4.9/prebuilt/linux-x86_64/bin:$PATH
 echo $PATH
-FF_CROSS_PREFIX=${PLATFORM}-
+FF_CROSS_PREFIX=${PLATFORM}
 CLANG_PREFIX=${PLATFORM}${API}-clang
 FF_SYSROOT=$ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin/sysroot
 
 echo $FF_CROSS_PREFIX
 
-export CC="${FF_CROSS_PREFIX}${API}clang"
-export CXX="${FF_CROSS_PREFIX}${API}clang++"
+export CC="${PLATFORM}${API}clang"
+export CXX="${PLATFORM}${API}clang++"
 
 FF_CFLAGS="-O3 -Wall -pipe \
     -std=c99 \

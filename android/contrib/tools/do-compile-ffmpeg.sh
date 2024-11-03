@@ -41,7 +41,7 @@ fi
 
 FF_BUILD_ROOT=`pwd`
 FF_ANDROID_PLATFORM=android-16
-
+FF_ANDROID_API=16
 
 FF_BUILD_NAME=
 FF_SOURCE=
@@ -72,7 +72,7 @@ FF_MAKE_TOOLCHAIN_FLAGS=$IJK_MAKE_TOOLCHAIN_FLAGS
 FF_MAKE_FLAGS=$IJK_MAKE_FLAG
 FF_GCC_VER=$IJK_GCC_VER
 FF_GCC_64_VER=$IJK_GCC_64_VER
-
+FF_CC=$IJK_CC
 
 #----- armv7a begin -----
 if [ "$FF_ARCH" = "armv7a" ]; then
@@ -92,24 +92,6 @@ if [ "$FF_ARCH" = "armv7a" ]; then
 
     FF_EXTRA_CFLAGS="$FF_EXTRA_CFLAGS -march=armv7-a -mcpu=cortex-a8 -mfpu=vfpv3-d16 -mfloat-abi=softfp -mthumb"
     FF_EXTRA_LDFLAGS="$FF_EXTRA_LDFLAGS -Wl,--fix-cortex-a8"
-
-    FF_ASSEMBLER_SUB_DIRS="arm"
-
-elif [ "$FF_ARCH" = "armv5" ]; then
-    FF_BUILD_NAME=ffmpeg-armv5
-    FF_BUILD_NAME_LIBAV3AD=libav3ad-armv5
-    FF_BUILD_NAME_LIBUAVS3D=libuavs3d-armv5
-    FF_BUILD_NAME_OPENSSL=openssl-armv5
-    FF_BUILD_NAME_LIBSOXR=libsoxr-armv5
-    FF_SOURCE=$FF_BUILD_ROOT/$FF_BUILD_NAME
-
-    FF_CROSS_PREFIX=arm-linux-androideabi
-    FF_TOOLCHAIN_NAME=${FF_CROSS_PREFIX}-${FF_GCC_VER}
-
-    FF_CFG_FLAGS="$FF_CFG_FLAGS --arch=arm"
-
-    FF_EXTRA_CFLAGS="$FF_EXTRA_CFLAGS -march=armv5te -mtune=arm9tdmi -msoft-float"
-    FF_EXTRA_LDFLAGS="$FF_EXTRA_LDFLAGS"
 
     FF_ASSEMBLER_SUB_DIRS="arm"
 
@@ -133,6 +115,7 @@ elif [ "$FF_ARCH" = "x86" ]; then
 
 elif [ "$FF_ARCH" = "x86_64" ]; then
     FF_ANDROID_PLATFORM=android-21
+    FF_ANDROID_API=21
 
     FF_BUILD_NAME=ffmpeg-x86_64
     FF_BUILD_NAME_LIBAV3AD=libav3ad-x86_64
@@ -153,6 +136,7 @@ elif [ "$FF_ARCH" = "x86_64" ]; then
 
 elif [ "$FF_ARCH" = "arm64" ]; then
     FF_ANDROID_PLATFORM=android-21
+    FF_ANDROID_API=21
 
     FF_BUILD_NAME=ffmpeg-arm64
     FF_BUILD_NAME_LIBAV3AD=libav3ad-arm64
@@ -212,12 +196,25 @@ mkdir -p $FF_PREFIX
 
 
 FF_TOOLCHAIN_TOUCH="$FF_TOOLCHAIN_PATH/touch"
-if [ ! -f "$FF_TOOLCHAIN_TOUCH" ]; then
-    $ANDROID_NDK/build/tools/make-standalone-toolchain.sh \
-        $FF_MAKE_TOOLCHAIN_FLAGS \
-        --platform=$FF_ANDROID_PLATFORM \
-        --toolchain=$FF_TOOLCHAIN_NAME
-    touch $FF_TOOLCHAIN_TOUCH;
+
+if [ -d "$FF_TOOLCHAIN_PATH" ]; then
+    rm -rf $FF_TOOLCHAIN_PATH
+fi
+if [ "$FF_CC" = "gcc" ]; then
+    if [ ! -f "$FF_TOOLCHAIN_TOUCH" ]; then
+        $ANDROID_NDK/build/tools/make-standalone-toolchain.sh \
+            $FF_MAKE_TOOLCHAIN_FLAGS \
+            --platform=android-$FF_ANDROID_PLATFORM \
+            --toolchain=$FF_TOOLCHAIN_NAME
+    fi
+else
+    ARCH=$FF_ARCH
+    if [ "$FF_ARCH" = "armv7a" ]; then
+        ARCH=arm
+    fi
+    FF_MAKE_TOOLCHAIN_FLAGS="--install-dir $FF_TOOLCHAIN_PATH --arch $ARCH --api $FF_ANDROID_API"
+    python3 $ANDROID_NDK/build/tools/make_standalone_toolchain.py \
+        $FF_MAKE_TOOLCHAIN_FLAGS
 fi
 
 
@@ -226,13 +223,28 @@ echo ""
 echo "--------------------"
 echo "[*] check ffmpeg env"
 echo "--------------------"
-export PATH=$FF_TOOLCHAIN_PATH/bin:$PATH
+FF_TOOLCHAIN_PATH_BIN=$FF_TOOLCHAIN_PATH/bin
+export PATH=$FF_TOOLCHAIN_PATH_BIN:$PATH
 #export CC="ccache ${FF_CROSS_PREFIX}-gcc"
-export CC="${FF_CROSS_PREFIX}-gcc"
-export CXX="${FF_CROSS_PREFIX}-g++"
-export LD=${FF_CROSS_PREFIX}-ld
-export AR=${FF_CROSS_PREFIX}-ar
-export STRIP=${FF_CROSS_PREFIX}-strip
+export CC=${FF_TOOLCHAIN_PATH_BIN}/${FF_CROSS_PREFIX}-${FF_CC}
+export LD=${FF_TOOLCHAIN_PATH_BIN}/${FF_CROSS_PREFIX}-ld
+export AR=${FF_TOOLCHAIN_PATH_BIN}/${FF_CROSS_PREFIX}-ar
+export STRIP=${FF_TOOLCHAIN_PATH_BIN}/${FF_CROSS_PREFIX}-strip
+
+NM=${FF_TOOLCHAIN_PATH_BIN}/${FF_CROSS_PREFIX}-nm
+RANLIB=${FF_TOOLCHAIN_PATH_BIN}/${FF_CROSS_PREFIX}-ranlib
+if [ ! -f "$AR" ]; then
+    ln -s ${FF_TOOLCHAIN_PATH_BIN}/llvm-ar $AR
+fi
+if [ ! -f "$STRIP" ]; then
+    ln -s ${FF_TOOLCHAIN_PATH_BIN}/llvm-strip $STRIP
+fi
+if [ ! -f "$NM" ]; then
+    ln -s ${FF_TOOLCHAIN_PATH_BIN}/llvm-nm $NM
+fi
+if [ ! -f "$RANLIB" ]; then
+    ln -s ${FF_TOOLCHAIN_PATH_BIN}/llvm-ranlib $RANLIB
+fi
 
 FF_CFLAGS="-O3 -Wall -pipe \
     -std=c99 \

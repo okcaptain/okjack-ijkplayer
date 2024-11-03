@@ -42,11 +42,12 @@ export IJK_GCC_VER=4.9
 export IJK_GCC_64_VER=4.9
 export IJK_MAKE_TOOLCHAIN_FLAGS=
 export IJK_MAKE_FLAG=
+export IJK_CC=gcc
 export IJK_NDK_REL=$(grep -o '^r[0-9]*.*' $ANDROID_NDK/RELEASE.TXT 2>/dev/null | sed 's/[[:space:]]*//g' | cut -b2-)
 case "$IJK_NDK_REL" in
     10e*)
         # we don't use 4.4.3 because it doesn't handle threads correctly.
-        if test -d ${ANDROID_NDK}/toolchains/arm-linux-androideabi-4.8
+        if test -d ${ANDROID_NDK}/toolchains/arm-linux-androideabi-4.9
         # if gcc 4.8 is present, it's there for all the archs (x86, mips, arm)
         then
             echo "NDKr$IJK_NDK_REL detected"
@@ -76,6 +77,9 @@ case "$IJK_NDK_REL" in
                     echo "You need the NDKr10e or later"
                     exit 1
                 fi
+            ;;
+            17* | 22* | 23* | 24* | 25* | 26* | 27*)
+                export IJK_CC=clang
             ;;
             *)
                 echo "You need the NDKr10e or later"

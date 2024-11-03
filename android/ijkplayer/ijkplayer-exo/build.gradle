@@ -3,15 +3,15 @@ apply plugin: 'com.android.library'
 android {
     // http://tools.android.com/tech-docs/new-build-system/tips
     //noinspection GroovyAssignabilityCheck
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    //noinspection GroovyAssignabilityCheck
     buildToolsVersion rootProject.ext.buildToolsVersion
+    //noinspection GroovyAssignabilityCheck
+    compileSdkVersion rootProject.ext.compileSdkVersion
 
     lintOptions {
         abortOnError false
     }
     defaultConfig {
-        minSdkVersion 9
+        minSdkVersion 16
         targetSdkVersion rootProject.ext.targetSdkVersion
     }
     buildTypes {
@@ -23,11 +23,11 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    compile 'com.google.android.exoplayer:exoplayer:r1.5.11'
+    implementation 'com.google.android.exoplayer:exoplayer:r1.5.11'
 
-    compile project(':ijkplayer-java')
+    implementation project(':ijkplayer-java')
     // compile 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'
 }
 

@@ -11,7 +11,7 @@ android {
         abortOnError false
     }
     defaultConfig {
-        minSdkVersion 9
+        minSdkVersion 16
         targetSdkVersion rootProject.ext.targetSdkVersion
     }
     buildTypes {
@@ -23,7 +23,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
 
 apply from: new File(rootProject.projectDir, "tools/gradle-on-demand.gradle");

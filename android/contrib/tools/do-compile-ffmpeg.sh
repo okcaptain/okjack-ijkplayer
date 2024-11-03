@@ -113,6 +113,8 @@ else
     exit 1
 fi
 
+echo $FF_SOURCE
+
 if [ ! -d $FF_SOURCE ]; then
     echo ""
     echo "!! ERROR"

@@ -20,7 +20,7 @@ jobs:
       - uses: nttld/setup-ndk@v1
         id: setup-ndk
         with:
-          ndk-version: r14b
+          ndk-version: r27
           add-to-path: false
           local-cache: true
 

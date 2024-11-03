@@ -70,7 +70,7 @@ if [ "$FF_ARCH" = "armv7a" ]; then
     FF_CROSS_PREFIX=arm-linux-androideabi
 	FF_TOOLCHAIN_NAME=${FF_CROSS_PREFIX}-${FF_GCC_VER}
 
-    FF_PLATFORM_CFG_FLAGS="android-armv7"
+    FF_PLATFORM_CFG_FLAGS="android-arm"
 
 elif [ "$FF_ARCH" = "armv5" ]; then
     FF_BUILD_NAME=openssl-armv5
@@ -112,7 +112,7 @@ elif [ "$FF_ARCH" = "arm64" ]; then
     FF_CROSS_PREFIX=aarch64-linux-android
     FF_TOOLCHAIN_NAME=${FF_CROSS_PREFIX}-${FF_GCC_64_VER}
 
-    FF_PLATFORM_CFG_FLAGS="linux-aarch64"
+    FF_PLATFORM_CFG_FLAGS="android-arm64"
 
 else
     echo "unknown architecture $FF_ARCH";

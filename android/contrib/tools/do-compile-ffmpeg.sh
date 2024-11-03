@@ -152,8 +152,11 @@ echo "--------------------"
 echo "[*] check ffmpeg env"
 echo "--------------------"
 export PATH=$ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin:$ANDROID_NDK/toolchains/$PLATFORM-4.9/prebuilt/linux-x86_64/bin:$PATH
+echo $PATH
 FF_CROSS_PREFIX=$PLATFORM-
 CLANG_PREFIX=$PLATFORM$API-clang
+
+echo $FF_CROSS_PREFIX
 
 export CC="${FF_CROSS_PREFIX}clang"
 export CXX="${FF_CROSS_PREFIX}clang++"
@@ -264,8 +267,9 @@ ls -al $FF_SOURCE
 if [ -f "./config.h" ]; then
     echo 'reuse configure'
 else
+    echo $CC
     which $CC
-    echo "./configure $FF_CFG_FLAGS --cc=$CLANG_PREFIX --cxx=$CLANG_PREFIX++ --extra-cflags=$FF_CFLAGS $FF_EXTRA_CFLAGS --extra-ldflags=$FF_DEP_LIBS $FF_EXTRA_LDFLAGS"
+    echo "./configure $FF_CFG_FLAGS --cc=${CLANG_PREFIX} --cxx=${CLANG_PREFIX}++ --extra-cflags=$FF_CFLAGS $FF_EXTRA_CFLAGS --extra-ldflags=$FF_DEP_LIBS $FF_EXTRA_LDFLAGS"
     ls -al ./
     chmod +x ./configure
     ./configure $FF_CFG_FLAGS \

@@ -82,7 +82,6 @@ build() {
 
   FF_PREFIX=$FF_BUILD_ROOT/build/$FF_BUILD_NAME/output
   mkdir -p $FF_PREFIX
-  make clean
   export PATH=$ANDROID_NDKE/toolchains/llvm/prebuilt/linux-x86_64/bin:$ANDROID_NDK/toolchains/$PLATFORM-4.9/prebuilt/linux-x86_64/bin:$PATH
   ./Configure android-$CPU -D__ANDROID_API__=$API no-shared --prefix=$FF_PREFIX --openssldir=$FF_PREFIX
 

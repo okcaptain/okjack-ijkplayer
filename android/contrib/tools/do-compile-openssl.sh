@@ -166,28 +166,13 @@ echo ""
 echo "--------------------"
 echo "[*] check ffmpeg env"
 echo "--------------------"
-FF_TOOLCHAIN_PATH_BIN=$FF_TOOLCHAIN_PATH/bin
-export PATH=$FF_TOOLCHAIN_PATH_BIN:$PATH
+export PATH=$ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin:$PATH
 #export CC="ccache ${FF_CROSS_PREFIX}-gcc"
-export CC=${FF_TOOLCHAIN_PATH_BIN}/${FF_CROSS_PREFIX}-${FF_CC}
-export LD=${FF_TOOLCHAIN_PATH_BIN}/${FF_CROSS_PREFIX}-ld
-export AR=${FF_TOOLCHAIN_PATH_BIN}/${FF_CROSS_PREFIX}-ar
-export STRIP=${FF_TOOLCHAIN_PATH_BIN}/${FF_CROSS_PREFIX}-strip
-
-NM=${FF_TOOLCHAIN_PATH_BIN}/${FF_CROSS_PREFIX}-nm
-RANLIB=${FF_TOOLCHAIN_PATH_BIN}/${FF_CROSS_PREFIX}-ranlib
-if [ ! -f "$AR" ]; then
-    ln -s ${FF_TOOLCHAIN_PATH_BIN}/llvm-ar $AR
-fi
-if [ ! -f "$STRIP" ]; then
-    ln -s ${FF_TOOLCHAIN_PATH_BIN}/llvm-strip $STRIP
-fi
-if [ ! -f "$NM" ]; then
-    ln -s ${FF_TOOLCHAIN_PATH_BIN}/llvm-nm $NM
-fi
-if [ ! -f "$RANLIB" ]; then
-    ln -s ${FF_TOOLCHAIN_PATH_BIN}/llvm-ranlib $RANLIB
-fi
+export CC="${FF_CROSS_PREFIX}-clang"
+export CC="${FF_CROSS_PREFIX}-gcc"
+export LD=${FF_CROSS_PREFIX}-ld
+export AR=${FF_CROSS_PREFIX}-ar
+export STRIP=${FF_CROSS_PREFIX}-strip
 
 
 #--------------------

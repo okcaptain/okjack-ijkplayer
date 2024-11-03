@@ -269,17 +269,14 @@ export COMMON_FF_CFG_FLAGS=
 
 #--------------------
 # with openssl
-#if [ -f "${FF_DEP_OPENSSL_LIB}/libssl.a" ]; then
-#    echo "OpenSSL detected"
-## FF_CFG_FLAGS="$FF_CFG_FLAGS --enable-nonfree"
-#    FF_CFG_FLAGS="$FF_CFG_FLAGS --enable-openssl"
-#
-#    FF_CFLAGS="$FF_CFLAGS -I${FF_DEP_OPENSSL_INC}"
-#    FF_DEP_LIBS="$FF_DEP_LIBS -L${FF_DEP_OPENSSL_LIB} -lssl -lcrypto"
-#fi
-
-
+if [ -f "${FF_DEP_OPENSSL_LIB}/libssl.a" ]; then
+    echo "OpenSSL detected"
+# FF_CFG_FLAGS="$FF_CFG_FLAGS --enable-nonfree"
     FF_CFG_FLAGS="$FF_CFG_FLAGS --enable-openssl"
+
+    FF_CFLAGS="$FF_CFLAGS -I${FF_DEP_OPENSSL_INC}"
+    FF_DEP_LIBS="$FF_DEP_LIBS -L${FF_DEP_OPENSSL_LIB} -lssl -lcrypto"
+fi
 
 if [ -f "${FF_DEP_LIBSOXR_LIB}/libsoxr.a" ]; then
     echo "libsoxr detected"

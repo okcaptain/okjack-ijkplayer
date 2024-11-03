@@ -257,6 +257,7 @@ echo "--------------------"
 echo "[*] configurate ffmpeg"
 echo "--------------------"
 cd $FF_SOURCE
+ls -al $FF_SOURCE
 if [ -f "./config.h" ]; then
     echo 'reuse configure'
 else

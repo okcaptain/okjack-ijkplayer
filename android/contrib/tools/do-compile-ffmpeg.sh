@@ -40,8 +40,6 @@ fi
 
 
 FF_BUILD_ROOT=`pwd`
-FF_ANDROID_PLATFORM=android-16
-FF_ANDROID_API=16
 
 FF_BUILD_NAME=
 FF_SOURCE=
@@ -68,23 +66,19 @@ echo "--------------------"
 echo "[*] make NDK standalone toolchain"
 echo "--------------------"
 . ./tools/do-detect-env.sh
-FF_MAKE_TOOLCHAIN_FLAGS=$IJK_MAKE_TOOLCHAIN_FLAGS
-FF_MAKE_FLAGS=$IJK_MAKE_FLAG
-FF_GCC_VER=$IJK_GCC_VER
-FF_GCC_64_VER=$IJK_GCC_64_VER
-FF_CC=$IJK_CC
 
-#----- armv7a begin -----
+
 if [ "$FF_ARCH" = "armv7a" ]; then
+    CPU=arm
+    API=16
+    PLATFORM=arm-linux-androideabi
+
     FF_BUILD_NAME=ffmpeg-armv7a
     FF_BUILD_NAME_LIBAV3AD=libav3ad-armv7a
     FF_BUILD_NAME_LIBUAVS3D=libuavs3d-armv7a
     FF_BUILD_NAME_OPENSSL=openssl-armv7a
     FF_BUILD_NAME_LIBSOXR=libsoxr-armv7a
     FF_SOURCE=$FF_BUILD_ROOT/$FF_BUILD_NAME
-
-    FF_CROSS_PREFIX=arm-linux-androideabi
-    FF_TOOLCHAIN_NAME=${FF_CROSS_PREFIX}-${FF_GCC_VER}
 
     FF_CFG_FLAGS="$FF_CFG_FLAGS --arch=arm --cpu=cortex-a8"
     FF_CFG_FLAGS="$FF_CFG_FLAGS --enable-neon"
@@ -95,48 +89,10 @@ if [ "$FF_ARCH" = "armv7a" ]; then
 
     FF_ASSEMBLER_SUB_DIRS="arm"
 
-elif [ "$FF_ARCH" = "x86" ]; then
-    FF_BUILD_NAME=ffmpeg-x86
-    FF_BUILD_NAME_LIBAV3AD=libav3ad-x86
-    FF_BUILD_NAME_LIBUAVS3D=libuavs3d-x86
-    FF_BUILD_NAME_OPENSSL=openssl-x86
-    FF_BUILD_NAME_LIBSOXR=libsoxr-x86
-    FF_SOURCE=$FF_BUILD_ROOT/$FF_BUILD_NAME
-
-    FF_CROSS_PREFIX=i686-linux-android
-    FF_TOOLCHAIN_NAME=x86-${FF_GCC_VER}
-
-    FF_CFG_FLAGS="$FF_CFG_FLAGS --arch=x86 --cpu=i686 --enable-yasm"
-
-    FF_EXTRA_CFLAGS="$FF_EXTRA_CFLAGS -march=atom -msse3 -ffast-math -mfpmath=sse"
-    FF_EXTRA_LDFLAGS="$FF_EXTRA_LDFLAGS"
-
-    FF_ASSEMBLER_SUB_DIRS="x86"
-
-elif [ "$FF_ARCH" = "x86_64" ]; then
-    FF_ANDROID_PLATFORM=android-21
-    FF_ANDROID_API=21
-
-    FF_BUILD_NAME=ffmpeg-x86_64
-    FF_BUILD_NAME_LIBAV3AD=libav3ad-x86_64
-    FF_BUILD_NAME_LIBUAVS3D=libuavs3d-x86_64
-    FF_BUILD_NAME_OPENSSL=openssl-x86_64
-    FF_BUILD_NAME_LIBSOXR=libsoxr-x86_64
-    FF_SOURCE=$FF_BUILD_ROOT/$FF_BUILD_NAME
-
-    FF_CROSS_PREFIX=x86_64-linux-android
-    FF_TOOLCHAIN_NAME=${FF_CROSS_PREFIX}-${FF_GCC_64_VER}
-
-    FF_CFG_FLAGS="$FF_CFG_FLAGS --arch=x86_64 --enable-yasm"
-
-    FF_EXTRA_CFLAGS="$FF_EXTRA_CFLAGS"
-    FF_EXTRA_LDFLAGS="$FF_EXTRA_LDFLAGS"
-
-    FF_ASSEMBLER_SUB_DIRS="x86"
-
-elif [ "$FF_ARCH" = "arm64" ]; then
-    FF_ANDROID_PLATFORM=android-21
-    FF_ANDROID_API=21
+  elif [ "$FF_ARCH" = "arm64" ]; then
+    CPU=arm64
+    API=21
+    PLATFORM=aarch64-linux-android
 
     FF_BUILD_NAME=ffmpeg-arm64
     FF_BUILD_NAME_LIBAV3AD=libav3ad-arm64
@@ -145,9 +101,6 @@ elif [ "$FF_ARCH" = "arm64" ]; then
     FF_BUILD_NAME_LIBSOXR=libsoxr-arm64
     FF_SOURCE=$FF_BUILD_ROOT/$FF_BUILD_NAME
 
-    FF_CROSS_PREFIX=aarch64-linux-android
-    FF_TOOLCHAIN_NAME=${FF_CROSS_PREFIX}-${FF_GCC_64_VER}
-
     FF_CFG_FLAGS="$FF_CFG_FLAGS --arch=aarch64 --enable-yasm"
 
     FF_EXTRA_CFLAGS="$FF_EXTRA_CFLAGS"
@@ -155,10 +108,10 @@ elif [ "$FF_ARCH" = "arm64" ]; then
 
     FF_ASSEMBLER_SUB_DIRS="aarch64 neon"
 
-else
-    echo "unknown architecture $FF_ARCH";
-    exit 1
-fi
+  else
+      echo "unknown architecture $FF_ARCH";
+      exit 1
+  fi
 
 if [ ! -d $FF_SOURCE ]; then
     echo ""
@@ -169,10 +122,7 @@ if [ ! -d $FF_SOURCE ]; then
     exit 1
 fi
 
-FF_TOOLCHAIN_PATH=$FF_BUILD_ROOT/build/$FF_BUILD_NAME/toolchain
-FF_MAKE_TOOLCHAIN_FLAGS="$FF_MAKE_TOOLCHAIN_FLAGS --install-dir=$FF_TOOLCHAIN_PATH"
 
-FF_SYSROOT=$FF_TOOLCHAIN_PATH/sysroot
 FF_PREFIX=$FF_BUILD_ROOT/build/$FF_BUILD_NAME/output
 FF_DEP_OPENSSL_INC=$FF_BUILD_ROOT/build/$FF_BUILD_NAME_OPENSSL/output/include
 FF_DEP_OPENSSL_LIB=$FF_BUILD_ROOT/build/$FF_BUILD_NAME_OPENSSL/output/lib
@@ -185,23 +135,12 @@ FF_DEP_LIBAV3AD_LIB=$FF_BUILD_ROOT/build/$FF_BUILD_NAME_LIBAV3AD/output/lib
 
 case "$UNAME_S" in
     CYGWIN_NT-*)
-        FF_SYSROOT="$(cygpath -am $FF_SYSROOT)"
         FF_PREFIX="$(cygpath -am $FF_PREFIX)"
     ;;
 esac
 
 
 mkdir -p $FF_PREFIX
-# mkdir -p $FF_SYSROOT
-
-
-FF_TOOLCHAIN_TOUCH="$FF_TOOLCHAIN_PATH/touch"
-if [ ! -f "$FF_TOOLCHAIN_TOUCH" ]; then
-    $ANDROID_NDK/build/tools/make-standalone-toolchain.sh \
-        $FF_MAKE_TOOLCHAIN_FLAGS \
-        --platform=$FF_ANDROID_PLATFORM \
-        --toolchain=$FF_TOOLCHAIN_NAME
-    touch $FF_TOOLCHAIN_TOUCH;
 
 
 #--------------------
@@ -209,14 +148,15 @@ echo ""
 echo "--------------------"
 echo "[*] check ffmpeg env"
 echo "--------------------"
-FF_TOOLCHAIN_PATH_BIN=$FF_TOOLCHAIN_PATH/bin
-export PATH=$FF_TOOLCHAIN_PATH_BIN:$PATH
-#export CC="ccache ${FF_CROSS_PREFIX}-gcc"
-export CC="${FF_CROSS_PREFIX}-clang"
-export CXX="${FF_CROSS_PREFIX}-clang++"
-export LD=${FF_CROSS_PREFIX}-ld
-export AR=${FF_CROSS_PREFIX}-ar
-export STRIP=${FF_CROSS_PREFIX}-strip
+export PATH=$ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin:$ANDROID_NDK/toolchains/$PLATFORM-4.9/prebuilt/linux-x86_64/bin:$PATH
+FF_CROSS_PREFIX=$PLATFORM-
+CLANG_PREFIX=$PLATFORM$API-clang
+
+export CC="${FF_CROSS_PREFIX}clang"
+export CXX="${FF_CROSS_PREFIX}clang++"
+export LD=${FF_CROSS_PREFIX}ld
+export AR=${FF_CROSS_PREFIX}ar
+export STRIP=${FF_CROSS_PREFIX}strip
 
 FF_CFLAGS="-O3 -Wall -pipe \
     -std=c99 \
@@ -321,10 +261,11 @@ if [ -f "./config.h" ]; then
     echo 'reuse configure'
 else
     which $CC
-    echo "./configure $FF_CFG_FLAGS --extra-cflags=$FF_CFLAGS $FF_EXTRA_CFLAGS --extra-ldflags=$FF_DEP_LIBS $FF_EXTRA_LDFLAGS"
+    echo "./configure $FF_CFG_FLAGS --cc=$CLANG_PREFIX --cxx=$CLANG_PREFIX++ --extra-cflags=$FF_CFLAGS $FF_EXTRA_CFLAGS --extra-ldflags=$FF_DEP_LIBS $FF_EXTRA_LDFLAGS"
     ls -al ./
     chmod +x ./configure
     ./configure $FF_CFG_FLAGS \
+            --cc=$CLANG_PREFIX --cxx=$CLANG_PREFIX++  \
             --extra-cflags="$FF_CFLAGS $FF_EXTRA_CFLAGS" \
             --extra-ldflags="$FF_DEP_LIBS $FF_EXTRA_LDFLAGS" || cat ffbuild/config.log
     make clean

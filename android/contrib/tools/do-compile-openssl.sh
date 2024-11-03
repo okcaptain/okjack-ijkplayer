@@ -157,8 +157,9 @@ else
         ARCH=arm
     fi
     FF_MAKE_TOOLCHAIN_FLAGS="--install-dir $FF_TOOLCHAIN_PATH --arch $ARCH --api $FF_ANDROID_API"
-    python $ANDROID_NDK/build/tools/make_standalone_toolchain.py \
-        $FF_MAKE_TOOLCHAIN_FLAGS
+    echo $FF_MAKE_TOOLCHAIN_FLAGS
+    python $ANDROID_NDK/build/tools/make_standalone_toolchain.py $FF_MAKE_TOOLCHAIN_FLAGS
+
 fi
 
 #--------------------

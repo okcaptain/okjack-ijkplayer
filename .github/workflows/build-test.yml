@@ -44,14 +44,10 @@ jobs:
           chmod +x ./config/module-custom.sh
           chmod +x ./config/module-ok.sh
           ./init-android.sh ${{ inputs.fftag }} ${{ inputs.abi }}
-          ./init-android-openssl.sh ${{ inputs.abi }}
           
           
           cd android/contrib
-          
-          
-          ./compile-openssl.sh clean
-          ./compile-openssl.sh ${{ inputs.abi }}
+
 
           
           ./compile-ffmpeg.sh clean

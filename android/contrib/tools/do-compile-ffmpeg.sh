@@ -67,10 +67,10 @@ echo "[*] make NDK standalone toolchain"
 echo "--------------------"
 . ./tools/do-detect-env.sh
 
+FF_CC=$IJK_CC
 
 if [ "$FF_ARCH" = "armv7a" ]; then
-    CPU=arm
-    API=16
+    FF_ANDROID_API=16
     PLATFORM=arm-linux-androideabi
     PLATFORM_T=armv7a-linux-androideabi
 
@@ -80,6 +80,9 @@ if [ "$FF_ARCH" = "armv7a" ]; then
     FF_BUILD_NAME_OPENSSL=openssl-armv7a
     FF_BUILD_NAME_LIBSOXR=libsoxr-armv7a
     FF_SOURCE=$FF_BUILD_ROOT/$FF_BUILD_NAME
+
+    FF_CROSS_PREFIX=arm-linux-androideabi
+    FF_TOOLCHAIN_NAME=${FF_CROSS_PREFIX}-${FF_GCC_VER}
 
     FF_CFG_FLAGS="$FF_CFG_FLAGS --arch=arm --cpu=cortex-a8"
     FF_CFG_FLAGS="$FF_CFG_FLAGS --enable-neon"
@@ -91,8 +94,7 @@ if [ "$FF_ARCH" = "armv7a" ]; then
     FF_ASSEMBLER_SUB_DIRS="arm"
 
 elif [ "$FF_ARCH" = "arm64" ]; then
-  CPU=arm64
-  API=21
+  FF_ANDROID_API=21
   PLATFORM=aarch64-linux-android
   PLATFORM_T=aarch64-linux-android
 
@@ -102,6 +104,9 @@ elif [ "$FF_ARCH" = "arm64" ]; then
   FF_BUILD_NAME_OPENSSL=openssl-arm64
   FF_BUILD_NAME_LIBSOXR=libsoxr-arm64
   FF_SOURCE=$FF_BUILD_ROOT/$FF_BUILD_NAME
+
+  FF_CROSS_PREFIX=aarch64-linux-android
+  FF_TOOLCHAIN_NAME=${FF_CROSS_PREFIX}-${FF_GCC_64_VER}
 
   FF_CFG_FLAGS="$FF_CFG_FLAGS --arch=aarch64 --enable-yasm"
 
@@ -126,7 +131,10 @@ if [ ! -d $FF_SOURCE ]; then
     echo ""
     exit 1
 fi
+FF_TOOLCHAIN_PATH=$FF_BUILD_ROOT/build/$FF_BUILD_NAME/toolchain
+FF_MAKE_TOOLCHAIN_FLAGS="$FF_MAKE_TOOLCHAIN_FLAGS --install-dir=$FF_TOOLCHAIN_PATH"
 
+FF_SYSROOT=$FF_TOOLCHAIN_PATH/sysroot
 
 FF_PREFIX=$FF_BUILD_ROOT/build/$FF_BUILD_NAME/output
 FF_DEP_OPENSSL_INC=$FF_BUILD_ROOT/build/$FF_BUILD_NAME_OPENSSL/output/include
@@ -147,26 +155,41 @@ esac
 
 mkdir -p $FF_PREFIX
 
+FF_TOOLCHAIN_TOUCH="$FF_TOOLCHAIN_PATH/touch"
+
+if [ -d "$FF_TOOLCHAIN_PATH" ]; then
+    rm -rf $FF_TOOLCHAIN_PATH
+fi
+if [ "$FF_CC" = "gcc" ]; then
+    if [ ! -f "$FF_TOOLCHAIN_TOUCH" ]; then
+        $ANDROID_NDK/build/tools/make-standalone-toolchain.sh \
+            $FF_MAKE_TOOLCHAIN_FLAGS \
+            --platform=android-$FF_ANDROID_PLATFORM \
+            --toolchain=$FF_TOOLCHAIN_NAME
+    fi
+else
+    ARCH=$FF_ARCH
+    if [ "$FF_ARCH" = "armv7a" ]; then
+        ARCH=arm
+    fi
+    FF_MAKE_TOOLCHAIN_FLAGS="--install-dir $FF_TOOLCHAIN_PATH --arch $ARCH --api $FF_ANDROID_API"
+    python $ANDROID_NDK/build/tools/make_standalone_toolchain.py \
+        $FF_MAKE_TOOLCHAIN_FLAGS
+fi
+
 
 #--------------------
 echo ""
 echo "--------------------"
 echo "[*] check ffmpeg env"
 echo "--------------------"
-export PATH=$ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin:$ANDROID_NDK/toolchains/$PLATFORM-4.9/prebuilt/linux-x86_64/bin:$PATH
-echo $PATH
-
-FF_CROSS_PREFIX=$ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin/${PLATFORM}
-FF_SYSROOT=$ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin/sysroot
-
-echo $FF_CROSS_PREFIX
-
-export CC="${PLATFORM}-clang"
-export CXX="${PLATFORM}-clang++"
-export LD=${PLATFORM}-ld
-export AS=${PLATFORM}-as
-export AR=${PLATFORM}-ar
-export RANLIB=${PLATFORM}-ranlib
+FF_TOOLCHAIN_PATH_BIN=$FF_TOOLCHAIN_PATH/bin
+export PATH=$FF_TOOLCHAIN_PATH_BIN:$PATH
+#export CC="ccache ${FF_CROSS_PREFIX}-gcc"
+export CC=${FF_CROSS_PREFIX}-${FF_CC}
+export LD=${FF_CROSS_PREFIX}-ld
+export AR=${FF_CROSS_PREFIX}-ar
+export STRIP=${FF_CROSS_PREFIX}-strip
 
 FF_CFLAGS="-O3 -Wall -pipe \
     -std=c99 \
@@ -276,7 +299,6 @@ else
     ls -al ./
     chmod +x ./configure
     ./configure $FF_CFG_FLAGS \
-            --sysroot=$FF_SYSROOT \
             --extra-cflags="$FF_CFLAGS $FF_EXTRA_CFLAGS" \
             --extra-ldflags="$FF_DEP_LIBS $FF_EXTRA_LDFLAGS" || cat ffbuild/config.log
     make clean

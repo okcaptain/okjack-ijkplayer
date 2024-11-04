@@ -1,1 +1,1 @@
-module-ok-ff6.sh
+module-ok.sh

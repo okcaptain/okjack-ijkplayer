@@ -64,6 +64,8 @@ echo "[*] make NDK standalone toolchain"
 echo "--------------------"
 . ./tools/do-detect-env.sh
 
+
+FF_MAKE_FLAGS=$IJK_MAKE_FLAG
 FF_CC=$IJK_CC
 
 if [ "$FF_ARCH" = "armv7a" ]; then
@@ -296,7 +298,6 @@ else
             --enable-shared \
             --extra-cflags="$FF_CFLAGS $FF_EXTRA_CFLAGS" \
             --extra-ldflags="$FF_DEP_LIBS $FF_EXTRA_LDFLAGS" || cat ffbuild/config.log
-    make clean
 fi
 
 #--------------------

@@ -192,7 +192,6 @@ export AR=${FF_CROSS_PREFIX}-ar
 export STRIP=${FF_CROSS_PREFIX}-strip
 
 FF_CFLAGS="-O3 -Wall -pipe \
-    -fcommon \
     -ffast-math \
     -fstrict-aliasing -Werror=strict-aliasing \
     -DANDROID -DNDEBUG"
@@ -342,6 +341,7 @@ do
 done
 
 $CC -lm -lz -shared --sysroot=$FF_SYSROOT -Wl,--no-undefined -Wl,-z,noexecstack $FF_EXTRA_LDFLAGS \
+    -fcommon \
     -Wl,-soname,libijkffmpeg.so \
     $FF_C_OBJ_FILES \
     $FF_ASM_OBJ_FILES \

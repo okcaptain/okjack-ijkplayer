@@ -312,3 +312,6 @@ if [ -d "${FF_PREFIX}/usr/local" ]; then
 else
     echo "${FF_PREFIX}/usr/local"
 fi
+
+mkdir -p $FF_PREFIX/usr/local/include/libffmpeg
+cp -f config.h $FF_PREFIX/usr/local/include/libffmpeg/config.h

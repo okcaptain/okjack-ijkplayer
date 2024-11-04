@@ -247,9 +247,6 @@ fi
 
 FF_CFG_FLAGS="$FF_CFG_FLAGS $COMMON_FF_CFG_FLAGS"
 
-#--------------------
-# Standard options:
-FF_CFG_FLAGS="$FF_CFG_FLAGS --prefix=$FF_PREFIX"
 
 # Advanced options (experts only):
 FF_CFG_FLAGS="$FF_CFG_FLAGS --cross-prefix=${FF_CROSS_PREFIX}-"
@@ -305,5 +302,7 @@ echo ""
 echo "--------------------"
 echo "[*] compile ffmpeg"
 echo "--------------------"
-make $FF_MAKE_FLAGS > /dev/null
-make install
+make $FF_MAKE_FLAGS
+make DESTDIR="$FF_PREFIX" install
+
+ls -al $FF_PREFIX

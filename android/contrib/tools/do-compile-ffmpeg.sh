@@ -306,3 +306,9 @@ make $FF_MAKE_FLAGS
 make DESTDIR="$FF_PREFIX" install
 
 ls -al $FF_PREFIX
+ls -al $FF_PREFIX/usr
+if [ -d "${FF_PREFIX}/usr/local" ]; then
+    ls -al $FF_PREFIX/usr/local
+else
+    echo "${FF_PREFIX}/usr/local"
+fi

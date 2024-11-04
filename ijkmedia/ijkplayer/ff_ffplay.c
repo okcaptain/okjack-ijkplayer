@@ -3044,15 +3044,15 @@ static int stream_has_enough_packets(AVStream *st, int stream_id, PacketQueue *q
 static int is_realtime(AVFormatContext *s)
 {
     if(   !strcmp(s->iformat->name, "rtp")
-       || !strcmp(s->iformat->name, "rtsp")
-       || !strcmp(s->iformat->name, "sdp")
-    )
+          || !strcmp(s->iformat->name, "rtsp")
+          || !strcmp(s->iformat->name, "sdp")
+            )
         return 1;
 
-    if(s->pb && (   !strncmp(s->filename, "rtp:", 4)
-                 || !strncmp(s->filename, "udp:", 4)
-                )
+    if(s->pb && (   !strncmp(s->url, "rtp:", 4)
+                    || !strncmp(s->url, "udp:", 4)
     )
+            )
         return 1;
     return 0;
 }
@@ -3380,7 +3380,7 @@ static int read_thread(void *arg)
             ret = avformat_seek_file(is->ic, -1, seek_min, seek_target, seek_max, is->seek_flags);
             if (ret < 0) {
                 av_log(NULL, AV_LOG_ERROR,
-                       "%s: error while seeking\n", is->ic->filename);
+                       "%s: error while seeking\n", is->ic->url);
             } else {
                 if (is->audio_stream >= 0) {
                     packet_queue_flush(&is->audioq);
@@ -3774,27 +3774,6 @@ static int video_refresh_thread(void *arg)
     return 0;
 }
 
-static int lockmgr(void **mtx, enum AVLockOp op)
-{
-    switch (op) {
-    case AV_LOCK_CREATE:
-        *mtx = SDL_CreateMutex();
-        if (!*mtx) {
-            av_log(NULL, AV_LOG_FATAL, "SDL_CreateMutex(): %s\n", SDL_GetError());
-            return 1;
-        }
-        return 0;
-    case AV_LOCK_OBTAIN:
-        return !!SDL_LockMutex(*mtx);
-    case AV_LOCK_RELEASE:
-        return !!SDL_UnlockMutex(*mtx);
-    case AV_LOCK_DESTROY:
-        SDL_DestroyMutex(*mtx);
-        return 0;
-    }
-    return 1;
-}
-
 // FFP_MERGE: main
 
 /*****************************************************************************
@@ -3885,7 +3864,6 @@ void ffp_global_init()
 
     avformat_network_init();
 
-    av_lockmgr_register(lockmgr);
     av_log_set_callback(ffp_log_callback_brief);
 
     av_init_packet(&flush_pkt);
@@ -3898,8 +3876,6 @@ void ffp_global_uninit()
 {
     if (!g_ffmpeg_global_inited)
         return;
-
-    av_lockmgr_register(NULL);
 
     // FFP_MERGE: uninit_opts
 

@@ -22,7 +22,8 @@ APP_PLATFORM := android-16
 APP_ABI := armeabi-v7a
 APP_PIE := false
 
-APP_STL := c++_shared
+APP_STL := c++_static
+APP_SUPPORT_FLEXIBLE_PAGE_SIZES := true
 
 APP_CFLAGS := -O3 -Wall -pipe \
     -ffast-math \

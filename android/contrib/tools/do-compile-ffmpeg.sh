@@ -296,7 +296,7 @@ else
     echo "./configure $FF_CFG_FLAGS --extra-cflags=$FF_CFLAGS $FF_EXTRA_CFLAGS --extra-ldflags=$FF_DEP_LIBS $FF_EXTRA_LDFLAGS"
     ls -al ./
     chmod +x ./configure
-    ./configure $FF_CFG_FLAGS \
+    ./configure -fcommon $FF_CFG_FLAGS \
             --extra-cflags="$FF_CFLAGS $FF_EXTRA_CFLAGS" \
             --extra-ldflags="$FF_DEP_LIBS $FF_EXTRA_LDFLAGS" || cat ffbuild/config.log
     make clean
@@ -340,8 +340,7 @@ do
     done
 done
 
-$CC -lm -lz -shared --sysroot=$FF_SYSROOT -Wl,--no-undefined -Wl,-z,noexecstack $FF_EXTRA_LDFLAGS \
-    -fcommon \
+$CC -lm -lz -shared -fcommon --sysroot=$FF_SYSROOT -Wl,--no-undefined -Wl,-z,noexecstack $FF_EXTRA_LDFLAGS \
     -Wl,-soname,libijkffmpeg.so \
     $FF_C_OBJ_FILES \
     $FF_ASM_OBJ_FILES \

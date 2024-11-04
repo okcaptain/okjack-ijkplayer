@@ -28,5 +28,4 @@ APP_STL := stlport_static
 APP_CFLAGS := -O3 -Wall -pipe \
     -ffast-math \
     -fstrict-aliasing -Werror=strict-aliasing \
-    -Wno-psabi -Wa,--noexecstack \
     -DANDROID -DNDEBUG

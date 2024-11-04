@@ -192,6 +192,7 @@ export AR=${FF_CROSS_PREFIX}-ar
 export STRIP=${FF_CROSS_PREFIX}-strip
 
 FF_CFLAGS="-O3 -Wall -pipe \
+    -fcommon \
     -ffast-math \
     -fstrict-aliasing -Werror=strict-aliasing \
     -DANDROID -DNDEBUG"

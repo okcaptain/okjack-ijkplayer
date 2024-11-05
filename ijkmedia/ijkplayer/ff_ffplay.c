@@ -2669,14 +2669,14 @@ static void sdl_audio_callback(void *opaque, Uint8 *stream, int len)
            }
            is->audio_buf_index = 0;
         }
-//        if (is->auddec.pkt_serial != is->audioq.serial) {
-//            is->audio_buf_index = is->audio_buf_size;
-//            memset(stream, 0, len);
-//            // stream += len;
-//            // len = 0;
-//            SDL_AoutFlushAudio(ffp->aout);
-//            break;
-//        }
+        if (is->auddec.pkt_serial != is->audioq.serial) {
+            is->audio_buf_index = is->audio_buf_size;
+            memset(stream, 0, len);
+            // stream += len;
+            // len = 0;
+            SDL_AoutFlushAudio(ffp->aout);
+            break;
+        }
         len1 = is->audio_buf_size - is->audio_buf_index;
         if (len1 > len)
             len1 = len;
